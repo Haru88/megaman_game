@@ -1,0 +1,17 @@
+*{
+    margin: 0;
+    padding: 0;   
+    background-color: rgb(51, 51, 51);
+}
+
+canvas{
+    border: 1px solid;
+}
+
+#container{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
