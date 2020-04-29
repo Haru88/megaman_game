@@ -2,6 +2,9 @@ class Level {
 
     constructor(width, height, resources) {
 
+        const data = resources.get("levelData");
+        console.log(data);
+
         this._tileSize = 10;
         this._width = width / this._tileSize;
         this._height = height / this._tileSize;

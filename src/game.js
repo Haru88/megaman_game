@@ -1,17 +1,20 @@
 
 fetch("https://informatik.hs-bremerhaven.de/tfiedler1/games/megaman_game/level/devLevel.json")
-.then(response => response.json()).then(data => console.log(data));
-
-Promise.all([
-    Loader.Imagefile("playerSprite", "https://informatik.hs-bremerhaven.de/tfiedler1/megaman_sprite.png"), 
-    Loader.Imagefile("backgroundImage", "https://informatik.hs-bremerhaven.de/tfiedler1/bg.png"),
-    Loader.Audiofile("jumpSound", "https://informatik.hs-bremerhaven.de/tfiedler1/flicker.wav"),
-    Loader.Audiofile("landSound", "https://informatik.hs-bremerhaven.de/tfiedler1/land.wav")
-]).then(values => {
-    const resources = new Map();
-    values.forEach(e => resources.set(e.tag, e.file));
-
-    new Game().init(resources);
+.then(response => response.json())
+.then(levelData => {
+    console.log(levelData);
+    Promise.all([
+        Promise.resolve({tag: "levelData", data: levelData}),
+        Loader.Imagefile("playerSprite", "https://informatik.hs-bremerhaven.de/tfiedler1/megaman_sprite.png"), 
+        Loader.Imagefile("backgroundImage", levelData.backgroundImageURL),
+        Loader.Audiofile("jumpSound", "https://informatik.hs-bremerhaven.de/tfiedler1/flicker.wav"),
+        Loader.Audiofile("landSound", "https://informatik.hs-bremerhaven.de/tfiedler1/land.wav")
+    ]).then(values => {
+        const resources = new Map();
+        values.forEach(e => resources.set(e.tag, e.file));
+    
+        new Game().init(resources);
+    });
 });
 
 class Game {
