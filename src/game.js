@@ -1,37 +1,42 @@
 
 fetch("https://informatik.hs-bremerhaven.de/tfiedler1/games/megaman_game/level/devLevel.json")
-.then(response => response.json())
-.then(levelData => {
-    console.log(levelData);
-    Promise.all([
-        Promise.resolve({tag: "levelData", data: levelData}),
-        Loader.Imagefile("playerSprite", "https://informatik.hs-bremerhaven.de/tfiedler1/megaman_sprite.png"), 
-        Loader.Imagefile("backgroundImage", levelData.backgroundImageURL),
-        Loader.Audiofile("jumpSound", "https://informatik.hs-bremerhaven.de/tfiedler1/flicker.wav"),
-        Loader.Audiofile("landSound", "https://informatik.hs-bremerhaven.de/tfiedler1/land.wav")
-    ]).then(values => {
-        const resources = new Map();
-        values.forEach(e => resources.set(e.tag, e.file));
-    
-        new Game().init(resources);
+    .then(response => response.json())
+    .then(levelData => {
+
+        console.log("LEVELDATA:", levelData);
+
+        Promise.all(
+            [
+                Promise.resolve({ tag: "levelData", file: levelData }),
+                Loader.Imagefile("playerSprite", "https://informatik.hs-bremerhaven.de/tfiedler1/megaman_sprite.png"),
+                Loader.Imagefile("backgroundImage", levelData.backgroundImageURL),
+                Loader.Audiofile("jumpSound", "https://informatik.hs-bremerhaven.de/tfiedler1/flicker.wav"),
+                Loader.Audiofile("landSound", "https://informatik.hs-bremerhaven.de/tfiedler1/land.wav")
+            ]
+        ).then(values => {
+
+            const resources = new Map();
+            values.forEach(e => resources.set(e.tag, e.file));
+            new Game().init(resources);
+
+        });
     });
-});
 
 class Game {
 
     init(resources) {
 
+        this._level = new Level(resources);
+
         this._canvas = document.getElementById("canvas");
-        this._canvas.width = 1060;
-        this._canvas.style.width = "1200px";
-        this._canvas.height = 270;
+        this._canvas.width = this._level.widthPX;
+        this._canvas.style.width = "1100px";
+        this._canvas.height = this._level.heightPX;
 
         this._canvas2 = document.getElementById("canvas2");
         this._canvas2.width = 500;
-        this._canvas2.style.width = "1000px";
+        this._canvas2.style.width = "1100px";
         this._canvas2.height = 270;
-
-        this._level = new Level(this._canvas.width, this._canvas.height, resources);
 
         this._MEGAMAN = new Player("Megaman", 230, 170, 30, 40, resources);
 

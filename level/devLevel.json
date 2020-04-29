@@ -3,15 +3,15 @@
     "gravity": 0.6,
     "friction": 0.3,
     "sizeInTiles": {
-        "x": 106,
-        "y": 27
+        "w": 106,
+        "h": 27
     },
     "tilesetURL": "",
     "backgroundImageURL": "https://informatik.hs-bremerhaven.de/tfiedler1/bg.png",
     "tiles": {
         "sizeInPixel": {
-            "x": 10,
-            "y": 10
+            "w": 10,
+            "h": 10
         },
         "area": [
             {
@@ -27,6 +27,22 @@
                 "y": 0,
                 "w": 106,
                 "h": 3,
+                "solid":1,
+                "tileNum":0
+            },
+            {
+                "x": 95,
+                "y": 0,
+                "w": 106,
+                "h": 18,
+                "solid":1,
+                "tileNum":0
+            },
+            {
+                "x": 0,
+                "y": 0,
+                "w": 11,
+                "h": 18,
                 "solid":1,
                 "tileNum":0
             }
