@@ -49,7 +49,7 @@ class Physics {
     }
     
     _collision(entity) {
-        const MAX_DETECT_RANGE = 5 * this._level._blockSize;
+        const MAX_DETECT_RANGE = 5 * this._level.tileSize;
 
         //Left
         let nextWall = false;
@@ -57,11 +57,11 @@ class Physics {
 
         if (entity.velocity.x < 0) {
             while (!nextWall.isSolid && range < MAX_DETECT_RANGE) {
-                nextWall = this._level.getTile(entity.bounds.left - range, entity.bounds.bottom - this._level._blockSize);
-                range += this._level._blockSize;
+                nextWall = this._level.getTile(entity.bounds.left - range, entity.bounds.bottom - this._level.tileSize);
+                range += this._level.tileSize;
             }
             if (nextWall.isSolid && this._overlap(entity, nextWall)) {
-                console.log("left triggered");
+                console.log(`left ${nextWall.name} touched by ${entity.name}`);
                 entity.position.x = nextWall.bounds.right;
                 entity.velocity.x = 0;
             }
@@ -73,11 +73,11 @@ class Physics {
 
         if (entity.velocity.x > 0) {
             while (!nextWall.isSolid && range < MAX_DETECT_RANGE) {
-                nextWall = this._level.getTile(entity.bounds.right + range, entity.bounds.bottom - this._level._blockSize);
-                range += this._level._blockSize;
+                nextWall = this._level.getTile(entity.bounds.right + range, entity.bounds.bottom - this._level.tileSize);
+                range += this._level.tileSize;
             }
             if (nextWall.isSolid && this._overlap(entity, nextWall)) {
-                console.log("right triggered");
+                console.log(`right ${nextWall.name} touched by ${entity.name}`);
                 entity.position.x = nextWall.position.x - entity.dim.w;
                 entity.velocity.x = 0;
             }
@@ -92,10 +92,10 @@ class Physics {
                 nextWall = this._level.getTile(entity.bounds.left, entity.bounds.top - range);
                 if (!nextWall.isSolid)
                     nextWall = this._level.getTile(entity.bounds.right, entity.bounds.top - range);
-                range += this._level._blockSize;
+                range += this._level.tileSize;
             }
             if (this._overlap(entity, nextWall)) {
-                console.log("top triggerd");
+                console.log(`ceiling ${nextWall.name} touched by ${entity.name}`);
                 entity.position.y = nextWall.bounds.bottom;
                 entity.velocity.y = 0.01;  
             }
@@ -110,10 +110,9 @@ class Physics {
                 nextWall = this._level.getTile(entity.bounds.left, entity.bounds.bottom + range);
                 if (!nextWall.isSolid)
                     nextWall = this._level.getTile(entity.bounds.right, entity.bounds.bottom + range);
-                range += this._level._blockSize;
+                range += this._level.tileSize;
             }
             if (this._overlap(entity, nextWall)) {
-                //console.log("floor triggered");
                 entity.position.y = nextWall.position.y - entity.dim.h;
                 entity.velocity.y = 0;
             }

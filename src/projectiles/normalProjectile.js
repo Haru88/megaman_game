@@ -1,7 +1,7 @@
 class NormalProjectile extends Entities {
 
-    constructor(x, y, w, h, img) {
-        super(x, y, w, h);
+    constructor(name, x, y, w, h, img) {
+        super(name, x, y, w, h);
     }
 
     update(){

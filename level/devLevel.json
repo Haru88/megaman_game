@@ -1,0 +1,37 @@
+{
+    "title": "debugTestLevel",
+    "gravity": 0.6,
+    "friction": 0.3,
+    "sizeInTiles": {
+        "x": 106,
+        "y": 27
+    },
+    "tilesetURL": "",
+    "backgroundImageURL": "",
+    "tiles": {
+        "sizeInPixel": {
+            "x": 10,
+            "y": 10
+        },
+        "area": [
+            {
+                "x": 0,
+                "y": 25,
+                "w": 106,
+                "h": 27,
+                "type":1,
+                "tileNum":0
+            },
+            {
+                "x": 0,
+                "y": 0,
+                "w": 106,
+                "h": 3,
+                "type":1,
+                "tileNum":0
+            }
+        ]
+    },
+    "entitys": {},
+    "events": {}
+}

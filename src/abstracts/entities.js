@@ -1,24 +1,14 @@
 class Entities {
 
-    constructor(x, y, width, height) {
+    constructor(name, x, y, width, height, resources) {
 
-        this.position = {
-            x: x,
-            y: y
-        }
+        this.position = { x: x, y: y }
+        this.dim = { w: width, h: height }
+        this.velocity = { x: 0, y: 0 }
 
-        this.dim = {
-            w: width,
-            h: height
-        }
-
-        this.velocity = {
-            x: 0,
-            y: 0
-        }
-
+        this._name = name;
+        this._resources = resources;
         this._direction = this.direction().right;
-
         this._ACCELERATION_X = 0.8;
         this._ACCELERATION_Y = 9;
         this._MAX_VELOCITY_X = 3;
@@ -41,13 +31,6 @@ class Entities {
         }
     }
 
-    get maxVel() {
-        return {
-            x: this._MAX_VELOCITY_X,
-            y: this._MAX_VELOCITY_Y
-        }
-    }
-
     copy() {
         return JSON.parse(JSON.stringify(this));
     }
@@ -56,10 +39,20 @@ class Entities {
 
     update() { }
 
-    drawEntity(context, x, y) {}
+    drawEntity(context, x, y) { }
 
     draw(canvas) { }
 
+    get name(){
+        return this._name;
+    }
+
+    get maxVel() {
+        return {
+            x: this._MAX_VELOCITY_X,
+            y: this._MAX_VELOCITY_Y
+        }
+    }
 
     get velX() {
         return this.velocity.x;

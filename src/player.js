@@ -1,38 +1,7 @@
 class Player extends Entities {
 
-    constructor(x, y, width, height) {
-        super(x, y, width, height);
-
-        this._ACCELERATION_X = 0.8;
-        this._ACCELERATION_Y = 9;
-        this._MAX_VELOCITY_X = 3;
-        this._MAX_VELOCITY_Y = 10;
-
-        const loads = [
-            { url: "https://informatik.hs-bremerhaven.de/tfiedler1/megaman_sprite.png", tag: "mainsprites" },
-            { url: "https://informatik.hs-bremerhaven.de/tfiedler1/flicker.wav", tag: "jumpsound" },
-            { url: "https://informatik.hs-bremerhaven.de/tfiedler1/land.wav", tag: "landsound" },
-        ];
-        this._ressources = [];
-
-        loads.forEach(element => {
-            if (element.url.includes(".png" || ".jpg")) {
-                const img = new Image();
-                img.crossOrigin = "Anonymous";
-                img.src = element.url;
-                img.onload = () => {
-                    this._ressources[element.tag] = img;
-                }
-
-            } else if (element.url.includes(".wav" || ".mp3")) {
-                const aud = new Audio();
-                aud.crossOrigin = "Anonymous";
-                aud.src = element.url;
-                aud.load();
-                aud.volume = 0.3;
-                this._ressources[element.tag] = aud;
-            }
-        });
+    constructor(name, x, y, width, height, resources) {
+        super(name, x, y, width, height, resources);
 
         this._forbidJumping = false;
         this._currState = this._states.standing;
@@ -85,7 +54,7 @@ class Player extends Entities {
         }
         if (keyDown[" "] && !this._forbidJumping) {
 
-            this._ressources["jumpsound"].play();
+            this._resources.get("jumpSound").play();
 
             this._forbidJumping = true;
             this.velocity.y = -this._ACCELERATION_Y;
@@ -165,7 +134,7 @@ class Player extends Entities {
 
     _spriteAnimations(num) {
 
-        const img = this._ressources["mainsprites"];
+        const img = this._resources.get("playerSprite");
 
         //standing Right
         const spriteMap = new Map();

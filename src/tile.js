@@ -1,9 +1,8 @@
 class Tile extends Entities{
 
-    constructor(x, y, width = 10, height = 10, img) {
-        super(x, y, width, height);
+    constructor(name, x, y, width, height, resources) {
+        super(name, x, y, width, height, resources);
         this._solid = false;
-        this._img = img;
     }
 
     set solid(bool){

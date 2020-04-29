@@ -1,6 +1,23 @@
+
+fetch("https://informatik.hs-bremerhaven.de/tfiedler1/games/megaman_game/level/devLevel.json")
+.then(response => response.json()).then(data => console.log(data));
+
+Promise.all([
+    Loader.Imagefile("playerSprite", "https://informatik.hs-bremerhaven.de/tfiedler1/megaman_sprite.png"), 
+    Loader.Imagefile("backgroundImage", "https://informatik.hs-bremerhaven.de/tfiedler1/bg.png"),
+    Loader.Audiofile("jumpSound", "https://informatik.hs-bremerhaven.de/tfiedler1/flicker.wav"),
+    Loader.Audiofile("landSound", "https://informatik.hs-bremerhaven.de/tfiedler1/land.wav")
+]).then(values => {
+    const resources = new Map();
+    values.forEach(e => resources.set(e.tag, e.file));
+
+    new Game().init(resources);
+});
+
 class Game {
 
-    init() {
+    init(resources) {
+
         this._canvas = document.getElementById("canvas");
         this._canvas.width = 1060;
         this._canvas.style.width = "1200px";
@@ -11,25 +28,23 @@ class Game {
         this._canvas2.style.width = "1000px";
         this._canvas2.height = 270;
 
-        this._level = new Level(this._canvas.width, this._canvas.height);
+        this._level = new Level(this._canvas.width, this._canvas.height, resources);
 
-        this._MEGAMAN = new Player(230, 170, 30, 40);
-        this._MEGAMAN2 = new Player(750, 200, 30, 40);
-        this._input = new Input(this._MEGAMAN, this._MEGAMAN2);
+        this._MEGAMAN = new Player("Megaman", 230, 170, 30, 40, resources);
+
+        this._input = new Input(this._MEGAMAN);
 
         this._physics = new Physics(this._level);
         this._physics.add(this._MEGAMAN);
-        this._physics.add(this._MEGAMAN2);
 
-        this._projectile = new NormalProjectile(200, 180, 5, 5);
+        //this._projectile = new NormalProjectile("np", 200, 180, 5, 5);
 
-        this._physics.add(this._projectile);
+        //this._physics.add(this._projectile);
 
         this._camera0 = new Camera(0, 0, this._level, this._MEGAMAN);
-        this._camera = new Camera(0, 0, this._level, this._MEGAMAN, this._projectile);
+        this._camera = new Camera(0, 0, this._level, this._MEGAMAN);
 
         this._run();
-
     }
 
     _run() {
@@ -63,8 +78,7 @@ class Game {
 
         this._input.update();
         this._MEGAMAN.update();
-        //this._MEGAMAN2.update();
-        this._projectile.update();
+        //this._projectile.update();
 
         this._camera.update(this._canvas);
         this._camera.update(this._canvas2);
@@ -75,6 +89,4 @@ class Game {
         this._camera.draw(this._canvas2);
     }
 }
-
-new Game().init();
 
