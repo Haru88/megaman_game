@@ -13,7 +13,7 @@ class Camera {
     }
 
     moveTo(x, y) {
-
+ 
     }
 
     update(canvas) {
