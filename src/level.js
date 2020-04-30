@@ -11,6 +11,8 @@ class Level {
         this._GRAVITY = data.gravity;
         this._FRICTION = data.friction;
 
+        this.marker = new DebugTileMarker(this._tileSize, this._tileSize);
+
         this._tiles = [];
 
         for (let i = 0; i < this._width * this._height; ++i) {
@@ -21,8 +23,7 @@ class Level {
         data.tiles.area.forEach(tile => {
             for (let i = tile.x; i < tile.w; ++i) {
                 for (let j = tile.y; j < tile.h; ++j) {
-                    if (tile.solid) {
-                        //console.log(i, j, j * tile.w + i, this._width * this._height);
+                    if (i >= 0 && i < this._width && j >= 0 && j < this._height && tile.solid) {
                         this._tiles[j * this._width + i].solid = true;
                     }
                 }
@@ -78,6 +79,7 @@ class Level {
         const context = canvas.getContext("2d");
         this._drawBackgroundLayer(context, 0, 0);
         this._drawTileLayer(context, 0, 0);
+        this.DTM.draw(context);
     }
 
     _pixToBlocks(pixel) {

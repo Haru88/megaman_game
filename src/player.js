@@ -185,7 +185,7 @@ class Player extends Entities {
     }
 
     _drawDebugHelper(ctx) {
-        ctx.fillStyle = "rgba(2d 55,255,255,50)";
+        ctx.fillStyle = "rgba(255,255,255,50)";
         ctx.strokeRect(Math.floor(this.position.x), Math.floor(this.position.y), this.dim.w, this.dim.h);
 
         ctx.font = "10px Comicd Sans MS";

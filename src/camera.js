@@ -13,7 +13,7 @@ class Camera {
     }
 
     moveTo(x, y) {
- 
+
     }
 
     update(canvas) {
@@ -29,11 +29,13 @@ class Camera {
     draw(canvas) {
         const context = canvas.getContext(`2d`);
         //Background
-        context.clearRect(0,0,canvas.width, canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
         this._level._drawBackgroundLayer(context, -this._sx, -this._sy);
 
         //Level
         this._level._drawTileLayer(context, -this._sx, -this._sy);
+
+        this._level.marker.drawEach(context, -this._sx, -this._sy);
 
         //Entities
         this._entities.forEach(element => {
