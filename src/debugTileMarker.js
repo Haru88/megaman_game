@@ -8,7 +8,6 @@ class DebugTileMarker {
 
     add(name) {
         this.marker.set(name, { x: 0, y: 0});
-        console.log(this.marker);
     }
 
     get(name) {
@@ -18,10 +17,15 @@ class DebugTileMarker {
         return this.marker.get(name);
     }
 
+    clear(){
+        this.marker = new Map();
+    }
+
     drawEach(context, sx, sy) {
 
         [...this.marker.values()].forEach(v => {
-            context.fillStyle = "rgb(255,0,0";
+            
+            context.strokeStyle = "rgb(255,0,0";
             context.strokeRect(v.x + sx, v.y + sy, this.w, this.h);
         });
     }

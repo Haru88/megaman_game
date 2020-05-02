@@ -6,8 +6,8 @@ class Level {
 
         this._name = data.title;
         this._tileSize = data.tiles.sizeInPixel.w;
-        this._width = data.sizeInTiles.w;
-        this._height = data.sizeInTiles.h;
+        this._widthIndex = data.sizeInTiles.w;
+        this._heightIndex = data.sizeInTiles.h;
         this._GRAVITY = data.gravity;
         this._FRICTION = data.friction;
 
@@ -15,26 +15,26 @@ class Level {
 
         this._tiles = [];
 
-        for (let i = 0; i < this._width * this._height; ++i) {
-            this._tiles.push(new Tile("wall", (i % this._width) * this._tileSize,
-                Math.floor(i / this._width) * this._tileSize, this._tileSize, this._tileSize, resources));
+        for (let i = 0; i < this._widthIndex * this._heightIndex; ++i) {
+            this._tiles.push(new Tile("wall", (i % this._widthIndex) * this._tileSize,
+                Math.floor(i / this._widthIndex) * this._tileSize, this._tileSize, this._tileSize, resources));
         }
 
         data.tiles.area.forEach(tile => {
             for (let i = tile.x; i < tile.w; ++i) {
                 for (let j = tile.y; j < tile.h; ++j) {
-                    if (i >= 0 && i < this._width && j >= 0 && j < this._height && tile.solid) {
-                        this._tiles[j * this._width + i].solid = true;
+                    if (i >= 0 && i < this._widthIndex && j >= 0 && j < this._heightIndex && tile.solid) {
+                        this._tiles[j * this._widthIndex + i].solid = true;
                     }
                 }
             }
         });
 
-        this._drawTileLayer = this._createTileLayer(this._tiles, this._width * this._tileSize,
-            this._height * this._tileSize);
+        this._drawTileLayer = this._createTileLayer(this._tiles, this._widthIndex * this._tileSize,
+            this._heightIndex * this._tileSize);
 
         this._drawBackgroundLayer = this._createBackgroundLayer(resources.get("backgroundImage"),
-            this._width * this._tileSize, this._height * this._tileSize);
+            this._widthIndex * this._tileSize, this._heightIndex * this._tileSize);
     }
 
     _createTileLayer(tiles, w, h) {
@@ -82,16 +82,41 @@ class Level {
         this.DTM.draw(context);
     }
 
-    _pixToBlocks(pixel) {
-        return Math.floor(pixel / this._tileSize);
+    toIndex(pos) {
+        return Math.floor(pos / this._tileSize);
     }
 
-    _pointToIndex(x, y) {
-        return this._pixToBlocks(y) * this._width + this._pixToBlocks(x);
+    getTileByPosition(posX, posY) {
+        return this._tiles[this.toIndex(posY) * this._widthIndex + this.toIndex(posX)];
     }
 
-    getTile(x, y) {
-        return this._tiles[this._pointToIndex(x, y)];
+    getRangeOfTileByEntity(entity) {
+
+        const matches = [];
+
+        const y1 = this.toIndex(entity.posY);
+        const y2 = this.toIndex(entity.posY + entity.height) ? this.toIndex(entity.posY + entity.height) : this._heightIndex;
+        const x1 = this.toIndex(entity.posX);
+        const x2 = this.toIndex(entity.posX + entity.width) ? this.toIndex(entity.posX + entity.width) : this._widthIndex;
+
+        for(let j = x1; j < x2; ++ j){
+            for(let i = y1; i < y2; ++i){
+            
+                const match = this.getTileByIndex(i, j);
+
+                if(match){
+                    match._name = `${j} / ${i}`;
+                    matches.push(match);
+                }
+            }
+        }
+
+        //console.log(matches);
+        return matches;
+    }
+
+    getTileByIndex(IndexX, IndexY) {
+        return this._tiles[IndexX * this._widthIndex + IndexY];
     }
 
     getTiles() {
@@ -119,18 +144,18 @@ class Level {
     }
 
     get width() {
-        return this._width;
+        return this._widthIndex;
     }
 
     get widthPX() {
-        return this._width * this._tileSize;
+        return this._widthIndex * this._tileSize;
     }
 
     get height() {
-        return this._height;
+        return this._heightIndex;
     }
 
     get heightPX() {
-        return this._height * this._tileSize;
+        return this._heightIndex * this._tileSize;
     }
 }

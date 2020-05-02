@@ -7,10 +7,18 @@ class Physics {
     }
 
     update() {
-        this._entities.forEach(e => {
-            this._gravity(e);
-            this._friction(e);
-            this._collision(e);
+        this._entities.forEach(entity => {
+
+            this._level.marker.clear();
+
+            this._gravity(entity);
+            this._friction(entity);       
+
+            entity.updateVelocityX();
+            this._CheckCollisionX(entity);
+
+            entity.updateVelocityY(); 
+            this._CheckCollisionY(entity);                     
         });
     }
 
@@ -39,7 +47,7 @@ class Physics {
         }
     }
 
-    _overlap(entity, another) {
+    _collide(entity, another) {
         if (entity.bounds.bottom > another.bounds.top &&
             entity.bounds.top < another.bounds.bottom &&
             entity.bounds.right > another.bounds.left &&
@@ -49,114 +57,76 @@ class Physics {
         return false;
     }
 
-    _collision(entity) {
-        const SCANRATE = 2;
-        const MAX_DETECT_RANGE = 2 * this._level.tileSize;
+    _CheckCollisionY(entity) {
 
-        this.CheckY(entity);
-        //this.CheckX(entity);
+        const offset = 2; //Add to position to avoid collision interference with the other axis.
 
-        if (entity.bounds.left < 0) {
-            entity.position.x = this._level.widthPX - entity.dim.w;
-        }
-        if (entity.bounds.right > this._level.widthPX) {
-            entity.position.x = 0;
-        }
-    }
+        const matches = [];
 
-    CheckY(entity) {
-        let tile = this._level.getTile(entity.bounds.left + entity.width / 2, entity.bounds.bottom);
+        [[entity.bounds.left, entity.bounds.bottom],
+        [entity.bounds.right, entity.bounds.bottom],
+        [entity.bounds.centerX, entity.bounds.bottom],
+        [entity.bounds.left, entity.bounds.top - offset],
+        [entity.bounds.right, entity.bounds.top - offset],
+        [entity.bounds.centerX, entity.bounds.top - offset]]
 
-        this._level.marker.get("bottom").y = tile.posY; 
-        this._level.marker.get("bottom").x = tile.posX; 
+            .forEach(e => {
+                const tile = this._level.getTileByPosition(e[0], e[1]);
+                if (tile && tile.isSolid) {
+                    matches.push(tile);
+                }
+            })
+   
+        for (const tile of matches) {
+            this._level.marker.get(`${tile.posX}${tile.posY}`).y = tile.posY;
+            this._level.marker.get(`${tile.posX}${tile.posY}`).x = tile.posX;
 
-        if (tile && this._overlap(entity, tile) && tile.isSolid) {
-            entity.position.y = tile.position.y - entity.dim.h;
-            entity.velocity.y = 0;
-            return;
-        }
-        tile = this._level.getTile(entity.bounds.left + entity.width / 2, entity.bounds.top);   
-
-        this._level.marker.get("top").y = tile.posY; 
-        this._level.marker.get("top").x = tile.posX;
-
-        if (tile && this._overlap(entity, tile) && tile.isSolid) {
-            entity.position.y = tile.bounds.bottom;
-            entity.velocity.y = 0;
-            return;
-        }
-    }
-
-    CheckX(entity) {
-        let tile = this._level.getTile(entity.bounds.right, entity.bounds.bottom);
-        if (this._overlap(entity, tile) && tile.isSolid) {
-            entity.position.x = tile.position.x - entity.width;
-            entity.velocity.x = 0;
-            return;
-        }
-        tile = this._level.getTile(entity.bounds.left, entity.bounds.bottom);
-        if (tile && this._overlap(entity, tile) && tile.isSolid) {
-            entity.position.x = tile.bounds.right;
-            entity.velocity.x = 0;
-        }
-    }
-
-    xxxxCheckY(entity, SCANRATE, MAX_DETECT_RANGE) {
-        //top
-        let upCheck = false;
-        let downCheck = false;
-        let range = 0;
-        console.log(`up:${upCheck}`, `down:${downCheck}`);
-        while (!upCheck.isSolid || !downCheck.isSolid && range < MAX_DETECT_RANGE) {
-            upCheck = this._level.getTile(entity.bounds.left + entity.width / 2, entity.bounds.top - range);
-            downCheck = this._level.getTile(entity.bounds.left + entity.width / 2, entity.bounds.bottom + range);
-            range += SCANRATE;
-        }
-        if (this._overlap(entity, upCheck)) {
-            //console.log(`ceiling ${upCheck.name} touched by ${entity.name}`);
-            entity.position.y = upCheck.bounds.bottom;
-            entity.velocity.y = 0.01;
-
-        } else if (this._overlap(entity, downCheck)) {
-            //console.log(`floor ${downCheck.name} touched by ${entity.name}`);
-            entity.position.y = downCheck.position.y - entity.dim.h;
-            entity.velocity.y = 0;
-        }
-
-    }
-
-    yyyCheckX(SCANRATE, MAX_DETECT_RANGE) {
-        //Left
-        let nextWall = false;
-        let range = 0;
-
-        if (entity.velocity.x < 0) {
-            while (!nextWall.isSolid && range < MAX_DETECT_RANGE) {
-                nextWall = this._level.getTile(entity.bounds.left - range, entity.bounds.bottom - this._level.tileSize);
-                range += SCANRATE;
+            if (entity.velocity.y > 0) {
+                entity.position.y = tile.position.y - entity.height;
+                entity.velocity.y = 0;
+                break;
+            } else if (entity.velocity.y < 0) {
+                entity.position.y = tile.position.y + tile.height + offset;
+                entity.velocity.y = 0;
+                break;
             }
-            if (nextWall.isSolid && this._overlap(entity, nextWall)) {
-                console.log(`left ${nextWall.name} touched by ${entity.name}`);
-                entity.position.x = nextWall.bounds.right;
+        }
+    }
+
+    _CheckCollisionX(entity) {
+
+        const offset = 2; //Add to position to avoid collision interference with the other axis.
+
+        const matches = [];
+        
+        [[entity.bounds.left - offset, entity.bounds.top],
+        [entity.bounds.left - offset, entity.bounds.centerY],
+        [entity.bounds.left - offset, entity.bounds.bottom - offset],
+        [entity.bounds.right + offset, entity.bounds.top],
+        [entity.bounds.right + offset, entity.bounds.centerY],
+        [entity.bounds.right + offset, entity.bounds.bottom - offset]]
+
+            .forEach(e => {
+                const tile = this._level.getTileByPosition(e[0], e[1]);
+                if (tile && tile.isSolid) {
+                    matches.push(tile);
+                }
+            })
+
+        //console.log(matches);
+
+        for (const tile of matches) {
+            this._level.marker.get(`${tile.posX}${tile.posY}`).y = tile.posY;
+            this._level.marker.get(`${tile.posX}${tile.posY}`).x = tile.posX;
+
+            if (entity.velocity.x > 0) {
+                entity.position.x = tile.position.x - entity.width - offset;
                 entity.velocity.x = 0;
-            }
-        }
-
-        //Right
-        nextWall = false;
-        range = 0;
-
-        if (entity.velocity.x > 0) {
-            while (!nextWall.isSolid && range < MAX_DETECT_RANGE) {
-                nextWall = this._level.getTile(entity.bounds.right + range, entity.bounds.bottom - this._level.tileSize);
-                if (!nextWall.isSolid)
-                    nextWall = this._level.getTile(entity.bounds.right + range, entity.bounds.top - this._level.tileSize);
-                range += SCANRATE;
-            }
-            if (nextWall.isSolid && this._overlap(entity, nextWall)) {
-                console.log(`right ${nextWall.name} touched by ${entity.name}`);
-                entity.position.x = nextWall.position.x - entity.dim.w;
+                break;
+            } else if (entity.velocity.x < 0) {
+                entity.position.x = tile.position.x + tile.width + offset;
                 entity.velocity.x = 0;
+                break;
             }
         }
     }

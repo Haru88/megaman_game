@@ -36,7 +36,7 @@ class Game {
         this._canvas2 = document.getElementById("canvas2");
         this._canvas2.width = 500;
         this._canvas2.style.width = "1100px";
-        this._canvas2.height = 270;
+        this._canvas2.height = 290;
 
         this._MEGAMAN = new Player("Megaman", 230, 170, 30, 40, resources);
 

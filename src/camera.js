@@ -39,7 +39,7 @@ class Camera {
 
         //Entities
         this._entities.forEach(element => {
-            element.drawEntity(context, element.posX - this._sx - 10, element.posY - this._sy - 20);
+            element.drawEntity(context, element.posX - this._sx/* - 10*/, element.posY - this._sy/* - 20*/);
         });
     }
 

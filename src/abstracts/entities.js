@@ -10,9 +10,9 @@ class Entities {
         this._resources = resources;
         this._direction = this.direction().right;
         this._ACCELERATION_X = 0.8;
-        this._ACCELERATION_Y = 9;
-        this._MAX_VELOCITY_X = 3;
-        this._MAX_VELOCITY_Y = 10;
+        this._ACCELERATION_Y = 10.5;
+        this._MAX_VELOCITY_X = 2.5;
+        this._MAX_VELOCITY_Y = 9;
     }
 
     get bounds() {
@@ -20,7 +20,9 @@ class Entities {
             top: this.position.y,
             bottom: this.position.y + this.dim.h,
             left: this.position.x,
-            right: this.position.x + this.dim.w
+            right: this.position.x + this.dim.w,
+            centerX: this.position.x + this.dim.w/2,
+            centerY: this.position.y + this.dim.h/2
         }
     }
 
@@ -37,7 +39,15 @@ class Entities {
 
     input(keyDown) { }
 
-    update() { }
+    updateVelocityX(){
+        this.velocity.x = this.velocity.x > this._MAX_VELOCITY_X ? this._MAX_VELOCITY_X : this.velocity.x
+        this.position.x += this.velX;
+    }
+
+    updateVelocityY(){
+        this.velocity.x = this.velocity.x < -this._MAX_VELOCITY_X ? -this._MAX_VELOCITY_X : this.velocity.x
+        this.position.y += this.velY;
+    }
 
     drawEntity(context, x, y) { }
 

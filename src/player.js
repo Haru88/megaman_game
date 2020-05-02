@@ -20,15 +20,9 @@ class Player extends Entities {
         if (this.velY == 0 && this.velX != 0) {
             this._currState = this._states.walking;
         }
-        if (this.velY < 0 || this.velY > 0.6) {
+        if (this.velY < 0) {
             this._currState = this._states.jumping;
         }
-
-        this.velocity.x = this.velocity.x > this._MAX_VELOCITY_X ? this._MAX_VELOCITY_X : this.velocity.x
-        this.velocity.x = this.velocity.x < -this._MAX_VELOCITY_X ? -this._MAX_VELOCITY_X : this.velocity.x
-
-        this.position.x += this.velX;
-        this.position.y += this.velY;
     }
 
     input(keyDown) {
@@ -79,7 +73,7 @@ class Player extends Entities {
                     } else {
                         this.velocity.x -= this._ACCELERATION_X;
                     }
-                    if (this.velocity.y > 0.6) {
+                    if (this.velocity.y > 0.1) {
                         this._forbidJumping = true;
                     }
                 },
@@ -185,9 +179,6 @@ class Player extends Entities {
     }
 
     _drawDebugHelper(ctx) {
-        ctx.fillStyle = "rgba(255,255,255,50)";
-        ctx.strokeRect(Math.floor(this.position.x), Math.floor(this.position.y), this.dim.w, this.dim.h);
-
         ctx.font = "10px Comicd Sans MS";
         ctx.fillStyle = "rgb(255,255,255)";
 
@@ -198,19 +189,14 @@ class Player extends Entities {
     }
 
     drawEntity(context, x, y) {
+
+        this._drawDebugHelper(context);
+
+        //context.fillStyle = "rgba(0,0,255,20)";
+        //context.fillRect(x, y, this.width, this.height);
+
         const sprite = this._sprites.nextSprite;
-        if (sprite.data[0]) context.drawImage(...sprite.data, x, y, sprite.data[3], sprite.data[4]);
+        if (sprite.data[0]) context.drawImage(...sprite.data, x - 10, y - 20, sprite.data[3], sprite.data[4]);
     }
 
-    draw(canvas) {
-        if (this._currState) {
-            const ctx = canvas.getContext("2d");
-
-            //this._drawDebugHelper(ctx);
-
-            const sprite = this._sprites.nextSprite;
-            if (sprite.data[0]) ctx.drawImage(...sprite.data, Math.floor(this.position.x) - 10,
-                Math.floor(this.position.y) - 20, sprite.data[3], sprite.data[4]);
-        }
-    }
 }

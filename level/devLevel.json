@@ -1,45 +1,29 @@
 {
     "title": "debugTestLevel",
-    "gravity": 0.6,
+    "gravity": 0.7,
     "friction": 0.3,
     "sizeInTiles": {
         "w": 106,
-        "h": 27
+        "h": 18   
     },
     "tilesetURL": "",
     "backgroundImageURL": "https://informatik.hs-bremerhaven.de/tfiedler1/bg.png",
     "tiles": {
         "sizeInPixel": {
-            "w": 10,
-            "h": 10
+            "w": 16,
+            "h": 16
         },
         "area": [
             {
                 "x": 0,
-                "y": 25,
-                "w": 45,
-                "h": 27,
-                "solid":1,
-                "tileNum":0
-            },
-            {
-                "x": 75,
-                "y": 25,
+                "y": 16,
                 "w": 106,
-                "h": 27,
+                "h": 18,
                 "solid":1,
                 "tileNum":0
             },
             {
                 "x": 0,
-                "y": 0,
-                "w": 50,
-                "h": 3,
-                "solid":1,
-                "tileNum":0
-            },
-            {
-                "x": 70,
                 "y": 0,
                 "w": 106,
                 "h": 3,
@@ -50,7 +34,7 @@
                 "x": 95,
                 "y": 0,
                 "w": 106,
-                "h": 18,
+                "h": 9,
                 "solid":1,
                 "tileNum":0
             },
@@ -58,47 +42,63 @@
                 "x": 0,
                 "y": 0,
                 "w": 11,
+                "h": 8,
+                "solid":1,
+                "tileNum":0
+            },
+            {
+                "x": 50,
+                "y": 14,
+                "w": 51,
                 "h": 18,
                 "solid":1,
                 "tileNum":0
             },
             {
-                "x": 30,
-                "y": 20,
-                "w": 35,
-                "h": 27,
+                "x": 45,
+                "y": 0,
+                "w": 46,
+                "h": 12,
                 "solid":1,
                 "tileNum":0
             },
             {
-                "x": 55,
-                "y": 10,
-                "w": 65,
-                "h": 27,
-                "solid":1,
-                "tileNum":0
-            },
-            {
-                "x": 42,
+                "x": 56,
                 "y": 15,
-                "w": 47,
-                "h": 16,
+                "w": 57,
+                "h": 18,
                 "solid":1,
                 "tileNum":0
             },
             {
-                "x": 70,
-                "y": 15,
-                "w": 75,
-                "h": 16,
+                "x": 62,
+                "y": 14,
+                "w": 63,
+                "h": 15,
                 "solid":1,
                 "tileNum":0
             },
             {
-                "x": 80,
-                "y": 18,
-                "w": 85,
-                "h": 19,
+                "x": 66,
+                "y": 12,
+                "w": 67,
+                "h": 13,
+                "solid":1,
+                "tileNum":0
+            },
+            {
+                "x": 62,
+                "y": 8,
+                "w": 63,
+                "h": 9,
+                "solid":1,
+                "tileNum":0
+            },
+            {
+                "x": 72,
+                "y": 13,
+                "w": 73,
+                "h": 14,
                 "solid":1,
                 "tileNum":0
             }
