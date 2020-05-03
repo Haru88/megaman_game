@@ -12,13 +12,13 @@ class Physics {
             this._level.marker.clear();
 
             this._gravity(entity);
-            this._friction(entity);       
+            this._friction(entity);
+
+            entity.updateVelocityY();
+            this._CheckCollisionY(entity);
 
             entity.updateVelocityX();
             this._CheckCollisionX(entity);
-
-            entity.updateVelocityY(); 
-            this._CheckCollisionY(entity);                     
         });
     }
 
@@ -59,16 +59,16 @@ class Physics {
 
     _CheckCollisionY(entity) {
 
-        const offset = 2; //Add to position to avoid collision interference with the other axis.
+        const offset = 0; //Add to position to avoid collision interference with the other axis.
 
         const matches = [];
 
         [[entity.bounds.left, entity.bounds.bottom],
         [entity.bounds.right, entity.bounds.bottom],
         [entity.bounds.centerX, entity.bounds.bottom],
-        [entity.bounds.left, entity.bounds.top - offset],
-        [entity.bounds.right, entity.bounds.top - offset],
-        [entity.bounds.centerX, entity.bounds.top - offset]]
+        [entity.bounds.left, entity.bounds.top],
+        [entity.bounds.right, entity.bounds.top],
+        [entity.bounds.centerX, entity.bounds.top]]
 
             .forEach(e => {
                 const tile = this._level.getTileByPosition(e[0], e[1]);
@@ -76,17 +76,18 @@ class Physics {
                     matches.push(tile);
                 }
             })
-   
+
         for (const tile of matches) {
-            this._level.marker.get(`${tile.posX}${tile.posY}`).y = tile.posY;
-            this._level.marker.get(`${tile.posX}${tile.posY}`).x = tile.posX;
+            this._level.marker.get(`y`).y = tile.posY;
+            this._level.marker.get(`y`).x = tile.posX;
 
             if (entity.velocity.y > 0) {
                 entity.position.y = tile.position.y - entity.height;
                 entity.velocity.y = 0;
                 break;
             } else if (entity.velocity.y < 0) {
-                entity.position.y = tile.position.y + tile.height + offset;
+                console.log("top collision occured", entity.position, tile.position);
+                entity.position.y = tile.position.y + tile.height;
                 entity.velocity.y = 0;
                 break;
             }
@@ -95,16 +96,16 @@ class Physics {
 
     _CheckCollisionX(entity) {
 
-        const offset = 2; //Add to position to avoid collision interference with the other axis.
+        const offset = 0; //Add to position to avoid collision interference with the other axis.
 
         const matches = [];
-        
+
         [[entity.bounds.left - offset, entity.bounds.top],
         [entity.bounds.left - offset, entity.bounds.centerY],
-        [entity.bounds.left - offset, entity.bounds.bottom - offset],
-        [entity.bounds.right + offset, entity.bounds.top],
-        [entity.bounds.right + offset, entity.bounds.centerY],
-        [entity.bounds.right + offset, entity.bounds.bottom - offset]]
+        [entity.bounds.left - offset, entity.bounds.bottom - 2],
+        [entity.bounds.right, entity.bounds.top],
+        [entity.bounds.right, entity.bounds.centerY],
+        [entity.bounds.right, entity.bounds.bottom - 2]]
 
             .forEach(e => {
                 const tile = this._level.getTileByPosition(e[0], e[1]);
@@ -113,18 +114,20 @@ class Physics {
                 }
             })
 
-        //console.log(matches);
-
         for (const tile of matches) {
-            this._level.marker.get(`${tile.posX}${tile.posY}`).y = tile.posY;
-            this._level.marker.get(`${tile.posX}${tile.posY}`).x = tile.posX;
+            this._level.marker.get(`x`).y = tile.posY;
+            this._level.marker.get(`x`).x = tile.posX;
 
-            if (entity.velocity.x > 0) {
-                entity.position.x = tile.position.x - entity.width - offset;
+            if (entity.velocity.x < 0) {
+                console.clear();
+                console.log("left collision occured", entity.position, tile.position);
+                entity.position.x = tile.position.x + tile.width + offset;
                 entity.velocity.x = 0;
                 break;
-            } else if (entity.velocity.x < 0) {
-                entity.position.x = tile.position.x + tile.width + offset;
+            } else if (entity.velocity.x > 0) {
+                console.clear();
+                console.log("right collision occured", entity.position, tile.position);
+                entity.position.x = tile.position.x - entity.width;
                 entity.velocity.x = 0;
                 break;
             }

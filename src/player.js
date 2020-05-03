@@ -6,6 +6,8 @@ class Player extends Entities {
         this._forbidJumping = false;
         this._currState = this._states.standing;
         this._sprites = this._spriteAnimations(0);
+
+        this._maxHealth = 5;
     }
 
     update() {
@@ -23,12 +25,14 @@ class Player extends Entities {
         if (this.velY < 0) {
             this._currState = this._states.jumping;
         }
+
+        this._sprite = this._sprites.nextSprite;
     }
 
     input(keyDown) {
 
-        if(keyDown["s"]){
-            
+        if (keyDown["s"]) {
+
         }
 
         if (keyDown["a"]) {
@@ -141,7 +145,7 @@ class Player extends Entities {
             new Sprite(img, 250, 120, 50, 60, 10)
         ));
         //walking Right
-        const duration = 9;
+        const duration = 4;
         spriteMap.set(2, new SpriteAnimations(2,
             new Sprite(img, 50, 0, 50, 60, duration), new Sprite(img, 100, 0, 50, 60, duration),
             new Sprite(img, 150, 0, 50, 60, duration), new Sprite(img, 200, 0, 50, 60, duration),
@@ -178,25 +182,10 @@ class Player extends Entities {
         }
     }
 
-    _drawDebugHelper(ctx) {
-        ctx.font = "10px Comicd Sans MS";
-        ctx.fillStyle = "rgb(255,255,255)";
+    draw(context, x, y) {
 
-        ctx.fillText("Player 1", 10, 10);
-        ctx.fillText("Position:  " + this.position.x.toFixed(2) + "  /  " + this.position.y.toFixed(2), 10, 20);
-        ctx.fillText("Velocity:  " + this.velX.toFixed(2) + "  /  " + this.velY.toFixed(2), 10, 30);
-        //ctx.fillText("State:  " + this._currState.name, 10, 40);
-    }
-
-    drawEntity(context, x, y) {
-
-        this._drawDebugHelper(context);
-
-        //context.fillStyle = "rgba(0,0,255,20)";
-        //context.fillRect(x, y, this.width, this.height);
-
-        const sprite = this._sprites.nextSprite;
-        if (sprite.data[0]) context.drawImage(...sprite.data, x - 10, y - 20, sprite.data[3], sprite.data[4]);
+        //this._drawDebugHelper(context, x, y);      
+        if (this._sprite.data[0]) context.drawImage(...this._sprite.data, x - this.width, y - this.height, this._sprite.data[3], this._sprite.data[4]);
     }
 
 }

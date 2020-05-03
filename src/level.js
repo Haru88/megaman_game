@@ -74,14 +74,6 @@ class Level {
         };
     }
 
-    draw(canvas) {
-
-        const context = canvas.getContext("2d");
-        this._drawBackgroundLayer(context, 0, 0);
-        this._drawTileLayer(context, 0, 0);
-        this.DTM.draw(context);
-    }
-
     toIndex(pos) {
         return Math.floor(pos / this._tileSize);
     }

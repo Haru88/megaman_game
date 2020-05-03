@@ -13,6 +13,9 @@ class Entities {
         this._ACCELERATION_Y = 10.5;
         this._MAX_VELOCITY_X = 2.5;
         this._MAX_VELOCITY_Y = 9;
+
+        this._health = 1;
+        this._maxHealth = 1;
     }
 
     get bounds() {
@@ -20,7 +23,7 @@ class Entities {
             top: this.position.y,
             bottom: this.position.y + this.dim.h,
             left: this.position.x,
-            right: this.position.x + this.dim.w,
+            right: this.position.x + this.dim.w - 1, 
             centerX: this.position.x + this.dim.w/2,
             centerY: this.position.y + this.dim.h/2
         }

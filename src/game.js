@@ -38,7 +38,7 @@ class Game {
         this._canvas2.style.width = "1100px";
         this._canvas2.height = 290;
 
-        this._MEGAMAN = new Player("Megaman", 230, 170, 30, 40, resources);
+        this._MEGAMAN = new Player("Megaman", 600, 200, 15, 30, resources);
 
         this._input = new Input(this._MEGAMAN);
 
@@ -51,6 +51,7 @@ class Game {
 
         this._camera0 = new Camera(0, 0, this._level, this._MEGAMAN);
         this._camera = new Camera(0, 0, this._level, this._MEGAMAN);
+        //this._camera.turnDebugMode();
 
         this._run();
     }
@@ -83,18 +84,13 @@ class Game {
     }
 
     _update() {
-
         this._input.update();
         this._MEGAMAN.update();
         //this._projectile.update();
-
         this._physics.update();
-
-        this._camera.update(this._canvas);
         this._camera.update(this._canvas2);
-
         this._camera0.draw(this._canvas);
-        this._camera.draw(this._canvas2);
+        this._camera.draw(this._canvas2); 
     }
 }
 
