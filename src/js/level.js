@@ -44,7 +44,7 @@ class Level {
         buffer.height = h;
 
         const context = buffer.getContext(`2d`);
-        context.fillStyle = `rgb(150, 100, 100)`;
+        context.fillStyle = `rgb(170, 120, 50)`;
 
         tiles.forEach((tile) => {
             if (tile.isSolid) {

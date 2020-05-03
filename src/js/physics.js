@@ -88,7 +88,7 @@ class Physics {
             } else if (entity.velocity.y < 0) {
                 console.log("top collision occured", entity.position, tile.position);
                 entity.position.y = tile.position.y + tile.height;
-                entity.velocity.y = 0;
+                entity.velocity.y = 0.01;
                 break;
             }
         }

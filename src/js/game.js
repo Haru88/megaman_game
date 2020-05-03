@@ -1,5 +1,5 @@
 
-fetch("https://informatik.hs-bremerhaven.de/tfiedler1/games/megaman_game/level/devLevel.json")
+fetch("https://informatik.hs-bremerhaven.de/tfiedler1/games/megaman_game/res/level/devLevel.json")
     .then(response => response.json())
     .then(levelData => {
 
@@ -28,13 +28,13 @@ class Game {
 
         this._level = new Level(resources);
 
-        this._canvas = document.getElementById("canvas");
+        /*this._canvas = document.getElementById("canvas");
         this._canvas.width = this._level.widthPX;
         this._canvas.style.width = "1100px";
-        this._canvas.height = this._level.heightPX;
+        this._canvas.height = this._level.heightPX;*/
 
         this._canvas2 = document.getElementById("canvas2");
-        this._canvas2.width = 500;
+        this._canvas2.width = 400;
         this._canvas2.style.width = "1100px";
         this._canvas2.height = 290;
 
@@ -49,7 +49,7 @@ class Game {
 
         //this._physics.add(this._projectile);
 
-        this._camera0 = new Camera(0, 0, this._level, this._MEGAMAN);
+        //this._camera0 = new Camera(0, 0, this._level, this._MEGAMAN);
         this._camera = new Camera(0, 0, this._level, this._MEGAMAN);
         //this._camera.turnDebugMode();
 
@@ -89,7 +89,7 @@ class Game {
         //this._projectile.update();
         this._physics.update();
         this._camera.update(this._canvas2);
-        this._camera0.draw(this._canvas);
+        //this._camera0.draw(this._canvas);
         this._camera.draw(this._canvas2); 
     }
 }
