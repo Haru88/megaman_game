@@ -16,15 +16,12 @@ class Input{
     }
 
     add(...entities){
-        //console.log();
         this._entities.push(...entities);        
     }
 
-    update(){
-        //if(Object.entries(this._keysDown).length > 0) console.log(this._keysDown);   
+    update(){ 
         this._entities.forEach(e => {
-            //console.log(e);
-            e.input(this._keysDown, this._keysPressed);   
+            e.input(this._keysDown);   
         });        
     }
 }

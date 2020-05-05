@@ -124,7 +124,7 @@ class Physics {
                 entity.position.x = tile.position.x + tile.width + offset;
                 entity.velocity.x = 0;
                 break;
-            } else if (entity.velocity.x > 0) {
+            } else if (entity.velocity.x > 0 ){
                 console.clear();
                 console.log("right collision occured", entity.position, tile.position);
                 entity.position.x = tile.position.x - entity.width;

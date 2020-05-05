@@ -3,131 +3,48 @@ class Player extends Entities {
     constructor(name, x, y, width, height, resources) {
         super(name, x, y, width, height, resources);
 
-        this._forbidJumping = false;
-        this._currState = this._states.standing;
+        this.changeActionStateTo.stand();
         this._sprites = this._spriteAnimations(0);
 
         this._maxHealth = 5;
+
+        this._interalKeys = {
+            left: Symbol("left"),
+            right: Symbol("right"),
+            jump: Symbol("jump"),
+        }
+
+        this._keyMap = new Map();
+        this._keyMap.set("a", this._interalKeys.left);
+        this._keyMap.set("d", this._interalKeys.right);
+        this._keyMap.set("w", this._interalKeys.jump);
+        this._keyMap.set(" ", this._interalKeys.jump);
+    }
+
+    get changeActionStateTo() {
+        return {
+            stand: () => this._currState = new Stand(this),
+            walk: () => this._currState = new Walk(this),
+            jump: () => this._currState = new Jump(this),
+            fall: () => this._currState = new Fall(this)
+        }
     }
 
     update() {
-        if (this._currState) {
-            this._currState.animation();
-            this._currState.movement();
-        }
-
-        if (this.velY == 0 && this.velX == 0) {
-            this._currState = this._states.standing;
-        }
-        if (this.velY == 0 && this.velX != 0) {
-            this._currState = this._states.walking;
-        }
-        if (this.velY < 0) {
-            this._currState = this._states.jumping;
-        }
+        this._currState.animate();
+        this._currState.onUpdate();
 
         this._sprite = this._sprites.nextSprite;
     }
 
     input(keyDown) {
-
-        if (keyDown["s"]) {
-
-        }
-
-        if (keyDown["a"]) {
-            this._direction = this.direction().left;
-            if (this.velY == 0) {
-                this._currState = this._states.walking;
-            } else {
-                this.velocity.x -= this._ACCELERATION_X;
+        const mapping = {}
+        Object.keys(keyDown).forEach(key => {
+            if (this._keyMap.has(key)) {
+                mapping[this._keyMap.get(key)] = true;
             }
-        } else if (keyDown["d"]) {
-            this._direction = this.direction().right;
-            if (this.velY == 0) {
-                this._currState = this._states.walking;
-            } else {
-                this.velocity.x += this._ACCELERATION_X;
-            }
-        }
-        if (keyDown[" "] && !this._forbidJumping) {
-
-            this._resources.get("jumpSound").play();
-
-            this._forbidJumping = true;
-            this.velocity.y = -this._ACCELERATION_Y;
-            this._currState = this._states.jumping;
-        }
-        if (!keyDown[" "] && this.velocity.y == 0) {
-            this._forbidJumping = false;
-        }
-        if (!keyDown["a"] && !keyDown["d"] && this._currState.isWalking) {
-            this._currState = this._states.standing;
-        }
-    }
-
-    get _states() {
-
-        return {
-            walking: {
-
-                movement: () => {
-                    if (this._direction == this.direction().right) {
-                        this.velocity.x += this._ACCELERATION_X;
-                    } else {
-                        this.velocity.x -= this._ACCELERATION_X;
-                    }
-                    if (this.velocity.y > 0.1) {
-                        this._forbidJumping = true;
-                    }
-                },
-                animation: () => {
-                    if (this._direction == this.direction().right) {
-                        if (this._sprites.id !== 2) {
-                            this._sprites = this._spriteAnimations(2);
-                        }
-                    } else {
-                        if (this._sprites.id !== 3) {
-                            this._sprites = this._spriteAnimations(3);
-                        }
-                    }
-                },
-                isWalking: 1
-            },
-            jumping: {
-
-                movement: () => {
-                    /*if(this._direction == this.direction().right){
-                        this.velocity.x += this._ACCELERATION_X;
-                    }else{
-                        this.velocity.x -= this._ACCELERATION_X;
-                    }*/
-                    return;
-                },
-                animation: () => {
-                    if (this._direction == this.direction().right) {
-                        if (this._sprites.id !== 4) {
-                            this._sprites = this._spriteAnimations(4);
-                        }
-                    } else {
-                        if (this._sprites.id !== 5) {
-                            this._sprites = this._spriteAnimations(5);
-                        }
-                    }
-                },
-                isJumping: 1
-            },
-            standing: {
-
-                movement: () => {
-                    return;
-                },
-                animation: () => {
-                    this._sprites = this._spriteAnimations(this._direction == this.direction().right ? 0 : 1);
-                },
-                isStanding: 1
-            }
-        }
+        });
+        this._currState.onInput(mapping);
     }
 
     _spriteAnimations(num) {
@@ -175,16 +92,7 @@ class Player extends Entities {
         return spriteMap.get(num);
     }
 
-    get maxVel() {
-        return {
-            x: this._MAX_VELOCITY_X,
-            y: this._MAX_VELOCITY_Y
-        }
-    }
-
     draw(context, x, y) {
-
-        //this._drawDebugHelper(context, x, y);      
         if (this._sprite.data[0]) context.drawImage(...this._sprite.data, x - this.width, y - this.height, this._sprite.data[3], this._sprite.data[4]);
     }
 
