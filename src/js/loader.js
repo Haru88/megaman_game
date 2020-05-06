@@ -3,7 +3,7 @@ class Loader {
     static Imagefile(tag, uri) {
         const lUri = uri.toLowerCase();
         return new Promise((resolve, reject) => {
-            if (lUri.includes(".png" || ".jpg")) {
+            if (lUri.includes(".png" || lUri.includes(".jpg"))) {
                 const img = new Image();
                 img.crossOrigin = "Anonymous";
                 img.src = lUri;
@@ -18,12 +18,13 @@ class Loader {
     static Audiofile(tag, uri) {
         const lUri = uri.toLowerCase();
         return new Promise((resolve, reject) => {
-            if (lUri.includes(".wav" || ".mp3")) {
+            if (lUri.includes(".mp3") || lUri.includes(".wav")) {
                 const aud = new Audio();
                 aud.crossOrigin = "Anonymous";
                 aud.src = lUri;
                 aud.load();
                 aud.volume = 0.3;
+                aud.muted = false;
                 aud.addEventListener(`canplaythrough`, () => resolve({ tag: tag, file: aud }));
                 aud.addEventListener('error', () => reject(new Error(`Failed to load Audio's URL: ${lUri}`)));
             } else {

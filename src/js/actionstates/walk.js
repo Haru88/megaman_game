@@ -38,12 +38,12 @@ class Walk extends ActionState{
 
             if (this._entity._sprites.id !== 2) {
 
-                this._entity._sprites = this._entity._spriteAnimations(2);
+                this._entity._sprites = this._entity.spriteSets(2);
             }
         } else {
             if (this._entity._sprites.id !== 3) {
 
-                this._entity._sprites = this._entity._spriteAnimations(3);
+                this._entity._sprites = this._entity.spriteSets(3);
             }
         }
     }

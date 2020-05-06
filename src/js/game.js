@@ -1,17 +1,19 @@
 
-fetch("https://informatik.hs-bremerhaven.de/tfiedler1/games/megaman_game/res/level/devLevel.json")
+const path = "https://informatik.hs-bremerhaven.de/tfiedler1/";
+
+fetch(path + "games/megaman_game/res/level/devLevel.json")
     .then(response => response.json())
     .then(levelData => {
 
         console.log("LEVELDATA:", levelData);
-
         Promise.all(
             [
                 Promise.resolve({ tag: "levelData", file: levelData }),
-                Loader.Imagefile("playerSprite", "https://informatik.hs-bremerhaven.de/tfiedler1/megaman_sprite.png"),
-                Loader.Imagefile("backgroundImage", levelData.backgroundImageURL),
-                Loader.Audiofile("jumpSound", "https://informatik.hs-bremerhaven.de/tfiedler1/flicker.wav"),
-                Loader.Audiofile("landSound", "https://informatik.hs-bremerhaven.de/tfiedler1/land.wav")
+                Loader.Imagefile("playerSprite", path + "games/megaman_res/megaman_sprite.png"),
+                Loader.Imagefile("backgroundImage", /*levelData.backgroundImageURL*/path + "games/megaman_res/bg2.png"),
+                Loader.Audiofile("jumpSound", path + "games/megaman_res/flicker.wav"),
+                Loader.Audiofile("landSound", path + "games/megaman_res/land.wav"),
+                Loader.Audiofile("mm7level", path + "games/megaman_res/mm7ruinedhighway.mp3")
             ]
         ).then(values => {
 
@@ -26,30 +28,21 @@ class Game {
 
     init(resources) {
 
+        this._resources = resources;
         this._level = new Level(resources);
-
-        /*this._canvas = document.getElementById("canvas");
-        this._canvas.width = this._level.widthPX;
-        this._canvas.style.width = "1100px";
-        this._canvas.height = this._level.heightPX;*/
 
         this._canvas2 = document.getElementById("canvas2");
         this._canvas2.width = 400;
         this._canvas2.style.width = "1100px";
         this._canvas2.height = 290;
 
-        this._MEGAMAN = new Player("Megaman", 600, 200, 15, 30, resources);
+        this._MEGAMAN = new Player("Megaman", 950, 140, 15, 30, resources);
 
         this._input = new Input(this._MEGAMAN);
 
         this._physics = new Physics(this._level);
         this._physics.add(this._MEGAMAN);
 
-        //this._projectile = new NormalProjectile("np", 200, 180, 5, 5);
-
-        //this._physics.add(this._projectile);
-
-        //this._camera0 = new Camera(0, 0, this._level, this._MEGAMAN);
         this._camera = new Camera(0, 0, this._level, this._MEGAMAN);
         //this._camera.turnDebugMode();
 
@@ -84,13 +77,16 @@ class Game {
     }
 
     _update() {
+
+        if (this._input.keysdown["p"]) {
+            this._resources.get("mm7level").play();
+        }
+
         this._input.update();
         this._MEGAMAN.update();
-        //this._projectile.update();
         this._physics.update();
         this._camera.update(this._canvas2);
-        //this._camera0.draw(this._canvas);
-        this._camera.draw(this._canvas2); 
+        this._camera.draw(this._canvas2);
     }
 }
 

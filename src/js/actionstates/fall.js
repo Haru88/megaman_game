@@ -1,39 +1,38 @@
 class Fall extends ActionState {
 
-    onUpdate() { 
-       if(this._entity.velocity.y == 0){
-
-        this._entity._resources.get("landSound").play();
-
-            if (this._entity.velocity.x != 0) {
-                this._entity.changeActionStateTo.walk();
+    onUpdate() {
+        const e = this._entity;
+        if (e.velocity.y == 0) {
+            e._resources.get("landSound").play();
+            if (e.velocity.x != 0) {
+                e.changeActionStateTo.walk();
             } else {
-                this._entity.changeActionStateTo.stand();;
+                e.changeActionStateTo.stand();;
             }
         }
     }
 
     onInput(keyDown) {
-        if (keyDown[this._entity._interalKeys.left]) {
-            
-            this._entity._direction = this._entity.direction().left;
-            this._entity.velocity.x -= this._entity._ACCELERATION_X;
-        } else if (keyDown[this._entity._interalKeys.right]) {
-
-            this._entity._direction = this._entity.direction().right;
-            this._entity.velocity.x += this._entity._ACCELERATION_X;
+        const e = this._entity;
+        if (keyDown[e._interalKeys.left]) {
+            e._direction = e.direction().left;
+            e.velocity.x -= e._ACCELERATION_X;
+        } else if (keyDown[e._interalKeys.right]) {
+            e._direction = e.direction().right;
+            e.velocity.x += e._ACCELERATION_X;
         }
     }
-    d
+
     animate() {
-        if (this._entity._direction == this._entity.direction().right) {
-            if (this._entity._sprites.id !== 4) {
-                this._entity._sprites = this._entity._spriteAnimations(4);
+        const e = this._entity;
+        if (e._direction == e.direction().right) {
+            if (e._sprites.id !== 4) {
+                e._sprites = e.spriteSets(4);
             }
         } else {
-            if (this._entity._sprites.id !== 5) {
-                this._entity._sprites = this._entity._spriteAnimations(5);
-            }
+            if (e._sprites.id !== 5) {
+                e._sprites = e.spriteSets(5);
+            } 
         }
     }
 }

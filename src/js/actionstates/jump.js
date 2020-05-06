@@ -30,11 +30,11 @@ d
         if (this._entity._direction == this._entity.direction().right) {
 
             if (this._entity._sprites.id !== 4) {
-                this._entity._sprites = this._entity._spriteAnimations(4);
+                this._entity._sprites = this._entity.spriteSets(4);
             }
         } else {
             if (this._entity._sprites.id !== 5) {
-                this._entity._sprites = this._entity._spriteAnimations(5);
+                this._entity._sprites = this._entity.spriteSets(5);
             }
         }
     }   

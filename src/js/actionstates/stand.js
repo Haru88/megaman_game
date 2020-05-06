@@ -26,6 +26,6 @@ class Stand extends ActionState{
     }
 
     animate() {
-        this._entity._sprites = this._entity._spriteAnimations(this._entity._direction == this._entity.direction().right ? 0 : 1);
+        this._entity._sprites = this._entity.spriteSets(this._entity._direction == this._entity.direction().right ? 0 : 1);
     }
 }

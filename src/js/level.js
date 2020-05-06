@@ -44,11 +44,19 @@ class Level {
         buffer.height = h;
 
         const context = buffer.getContext(`2d`);
-        context.fillStyle = `rgb(170, 120, 50)`;
+        context.fillStyle = `rgb(100, 130, 50)`;
 
         tiles.forEach((tile) => {
             if (tile.isSolid) {
                 context.fillRect(tile.posX, tile.posY, this._tileSize, this._tileSize);
+            }
+        });
+
+        context.strokeStyle = `rgb(40, 40, 0)`;
+
+        tiles.forEach((tile) => {
+            if (tile.isSolid) {
+                context.strokeRect(tile.posX, tile.posY, this._tileSize, this._tileSize);
             }
         });
 

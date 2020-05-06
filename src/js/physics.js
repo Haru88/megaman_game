@@ -14,10 +14,10 @@ class Physics {
             this._gravity(entity);
             this._friction(entity);
 
-            entity.updateVelocityY();
+            entity.updatePosY();
             this._CheckCollisionY(entity);
 
-            entity.updateVelocityX();
+            entity.updatePosX();    
             this._CheckCollisionX(entity);
         });
     }

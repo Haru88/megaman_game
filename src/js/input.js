@@ -24,4 +24,8 @@ class Input{
             e.input(this._keysDown);   
         });        
     }
+
+    get keysdown(){
+        return this._keysDown;
+    }
 }

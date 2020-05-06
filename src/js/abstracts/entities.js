@@ -42,12 +42,12 @@ class Entities {
 
     input(keyDown) { }
 
-    updateVelocityX(){
+    updatePosX(){
         this.velocity.x = this.velocity.x > this._MAX_VELOCITY_X ? this._MAX_VELOCITY_X : this.velocity.x
         this.position.x += this.velX;
     }
 
-    updateVelocityY(){
+    updatePosY(){
         this.velocity.x = this.velocity.x < -this._MAX_VELOCITY_X ? -this._MAX_VELOCITY_X : this.velocity.x
         this.position.y += this.velY;
     }
