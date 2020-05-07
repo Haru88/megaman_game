@@ -1,16 +1,16 @@
 class Walk extends ActionState{
 
     onUpdate() {
-        if (this._entity._direction == this._entity.direction().right) {
-
+        if (this._entity.headRight) {
             this._entity.velocity.x += this._entity._ACCELERATION_X;
-        } else {
 
+        } else {
             this._entity.velocity.x -= this._entity._ACCELERATION_X;
+
         }
         if(this._entity.velocity.y > 0){
-            
             this._entity.changeActionStateTo.fall();
+            
         }
     }
 
@@ -34,7 +34,7 @@ class Walk extends ActionState{
     }
 
     animate() {
-        if (this._entity._direction == this._entity.direction().right) {
+        if (this._entity.headRight) {
 
             if (this._entity._sprites.id !== 2) {
 

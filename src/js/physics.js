@@ -4,6 +4,8 @@ class Physics {
         this._entities = [];
         this._level = level;
 
+        this._tileCollision = new TileCollision(4, this._level);
+
     }
 
     update() {
@@ -15,10 +17,24 @@ class Physics {
             this._friction(entity);
 
             entity.updatePosY();
-            this._CheckCollisionY(entity);
+            this._tileCollision.Y(entity);
 
-            entity.updatePosX();    
-            this._CheckCollisionX(entity);
+            //entity.updatePosX();    
+            //this.X(entity);
+
+            /*if (this._tileCollision.top(entity) ||
+                this._tileCollision.bottom(entity)) {
+                entity.velocity.y = 0;
+            } else {
+                entity.updatePosY();
+            }*/
+
+            if (this._tileCollision.right(entity) ||
+                this._tileCollision.left(entity)) {
+                entity.velocity.x = 0;
+            } else {
+                entity.updatePosX();
+            }
         });
     }
 
@@ -55,83 +71,6 @@ class Physics {
             return true;
         }
         return false;
-    }
-
-    _CheckCollisionY(entity) {
-
-        const offset = 0; //Add to position to avoid collision interference with the other axis.
-
-        const matches = [];
-
-        [[entity.bounds.left, entity.bounds.bottom],
-        [entity.bounds.right, entity.bounds.bottom],
-        [entity.bounds.centerX, entity.bounds.bottom],
-        [entity.bounds.left, entity.bounds.top],
-        [entity.bounds.right, entity.bounds.top],
-        [entity.bounds.centerX, entity.bounds.top]]
-
-            .forEach(e => {
-                const tile = this._level.getTileByPosition(e[0], e[1]);
-                if (tile && tile.isSolid) {
-                    matches.push(tile);
-                }
-            })
-
-        for (const tile of matches) {
-            this._level.marker.get(`y`).y = tile.posY;
-            this._level.marker.get(`y`).x = tile.posX;
-
-            if (entity.velocity.y > 0) {
-                entity.position.y = tile.position.y - entity.height;
-                entity.velocity.y = 0;
-                break;
-            } else if (entity.velocity.y < 0) {
-                console.log("top collision occured", entity.position, tile.position);
-                entity.position.y = tile.position.y + tile.height;
-                entity.velocity.y = 0.01;
-                break;
-            }
-        }
-    }
-
-    _CheckCollisionX(entity) {
-
-        const offset = 0; //Add to position to avoid collision interference with the other axis.
-
-        const matches = [];
-
-        [[entity.bounds.left - offset, entity.bounds.top],
-        [entity.bounds.left - offset, entity.bounds.centerY],
-        [entity.bounds.left - offset, entity.bounds.bottom - 2],
-        [entity.bounds.right, entity.bounds.top],
-        [entity.bounds.right, entity.bounds.centerY],
-        [entity.bounds.right, entity.bounds.bottom - 2]]
-
-            .forEach(e => {
-                const tile = this._level.getTileByPosition(e[0], e[1]);
-                if (tile && tile.isSolid) {
-                    matches.push(tile);
-                }
-            })
-
-        for (const tile of matches) {
-            this._level.marker.get(`x`).y = tile.posY;
-            this._level.marker.get(`x`).x = tile.posX;
-
-            if (entity.velocity.x < 0) {
-                console.clear();
-                console.log("left collision occured", entity.position, tile.position);
-                entity.position.x = tile.position.x + tile.width + offset;
-                entity.velocity.x = 0;
-                break;
-            } else if (entity.velocity.x > 0 ){
-                console.clear();
-                console.log("right collision occured", entity.position, tile.position);
-                entity.position.x = tile.position.x - entity.width;
-                entity.velocity.x = 0;
-                break;
-            }
-        }
     }
 
     add(entity) {

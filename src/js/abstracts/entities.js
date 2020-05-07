@@ -18,12 +18,28 @@ class Entities {
         this._maxHealth = 1;
     }
 
+    updatePosX(){
+        this.velocity.x = this.velocity.x > this._MAX_VELOCITY_X ? this._MAX_VELOCITY_X : this.velocity.x
+        this.velocity.x = this.velocity.x < -this._MAX_VELOCITY_X ? -this._MAX_VELOCITY_X : this.velocity.x
+        this.position.x += this.velX;
+    }
+
+    updatePosY(){
+        this.velocity.y = this.velocity.y > this._MAX_VELOCITY_Y ? this._MAX_VELOCITY_Y : this.velocity.y
+        this.velocity.y = this.velocity.y < -this._MAX_VELOCITY_Y ? -this._MAX_VELOCITY_Y : this.velocity.y
+        this.position.y += this.velY;
+    }
+
+    input(keyDown) { }
+
+    draw(context, x, y) { }
+
     get bounds() {
         return {
             top: this.position.y,
             bottom: this.position.y + this.dim.h,
             left: this.position.x,
-            right: this.position.x + this.dim.w - 1, 
+            right: this.position.x + this.dim.w, 
             centerX: this.position.x + this.dim.w/2,
             centerY: this.position.y + this.dim.h/2
         }
@@ -40,21 +56,9 @@ class Entities {
         return JSON.parse(JSON.stringify(this));
     }
 
-    input(keyDown) { }
-
-    updatePosX(){
-        this.velocity.x = this.velocity.x > this._MAX_VELOCITY_X ? this._MAX_VELOCITY_X : this.velocity.x
-        this.position.x += this.velX;
+    get headRight(){
+        return this._direction === this.direction().right;
     }
-
-    updatePosY(){
-        this.velocity.x = this.velocity.x < -this._MAX_VELOCITY_X ? -this._MAX_VELOCITY_X : this.velocity.x
-        this.position.y += this.velY;
-    }
-
-    drawEntity(context, x, y) { }
-
-    draw(canvas) { }
 
     get name(){
         return this._name;

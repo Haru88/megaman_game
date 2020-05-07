@@ -25,7 +25,7 @@ class Fall extends ActionState {
 
     animate() {
         const e = this._entity;
-        if (e._direction == e.direction().right) {
+        if (e.headRight) {
             if (e._sprites.id !== 4) {
                 e._sprites = e.spriteSets(4);
             }

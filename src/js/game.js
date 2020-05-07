@@ -84,9 +84,10 @@ class Game {
 
         this._input.update();
         this._MEGAMAN.update();
-        this._physics.update();
+        
         this._camera.update(this._canvas2);
         this._camera.draw(this._canvas2);
+        this._physics.update();
     }
 }
 

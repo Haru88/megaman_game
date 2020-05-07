@@ -3,7 +3,7 @@ class Loader {
     static Imagefile(tag, uri) {
         const lUri = uri.toLowerCase();
         return new Promise((resolve, reject) => {
-            if (lUri.includes(".png" || lUri.includes(".jpg"))) {
+            if (lUri.includes(".png") || lUri.includes(".jpg")) {
                 const img = new Image();
                 img.crossOrigin = "Anonymous";
                 img.src = lUri;

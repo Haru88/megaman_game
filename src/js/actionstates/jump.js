@@ -27,7 +27,7 @@ class Jump extends ActionState{
     }
 d
     animate(){
-        if (this._entity._direction == this._entity.direction().right) {
+        if (this._entity.headRight) {
 
             if (this._entity._sprites.id !== 4) {
                 this._entity._sprites = this._entity.spriteSets(4);
