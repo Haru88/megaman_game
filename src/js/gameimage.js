@@ -1,18 +1,16 @@
-class GameSprite {
+class GameImage {
 
-    constructor(img, tw, th) {
+    constructor(img, tw = 0, th = 0) {
         this._img = img;
         this._tw = tw;
         this._th = th;
     }
 
     get(x, y) {
-
-        return [x * tw, y * th];
+        return [x * this._tw, y * this._th];
     }
 
-    mirrorX() {
-
+    mirrorY() {
         const c = document.createElement("canvas");
         c.width = this._img.width;
         c.height = this._img.height;
@@ -21,7 +19,6 @@ class GameSprite {
         context.translate(-this._img.width, 0);
         context.drawImage(this._img, 0, 0);
         this._img = c;
-
         return this;
     }
 
@@ -29,7 +26,7 @@ class GameSprite {
         return [this._tw, this._th];
     }
 
-    get image() {
+    get core() {
         return this._img;
     }
 

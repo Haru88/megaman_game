@@ -1,17 +1,17 @@
 class Sprite{
 
-    constructor(sx, sy, frametime){
+    constructor(sx, sy, duration){
 
         this._sx = sx;
         this._sy = sy;
-        this._frametime = frametime;
+        this._duration = duration;
     }
 
     get data(){
         return [this._sx, this._sy]
     }
 
-    get frameTime(){
-        return this._frametime;
+    get duration(){
+        return this._duration;
     }
 }

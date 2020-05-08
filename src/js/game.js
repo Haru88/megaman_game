@@ -19,6 +19,10 @@ fetch(path + "games/megaman_game/res/level/devLevel.json")
 
             const resources = new Map();
             values.forEach(e => resources.set(e.tag, e.file));
+            resources.set("playerSprite", new GameImage(resources.get("playerSprite"), 50, 60));
+            resources.set("backgroundImage", new GameImage(resources.get("backgroundImage")));
+            resources.set("playerSpriteMirror", new GameImage(resources.get("playerSprite").core, 50, 60).mirrorY());
+            console.log(resources);
             new Game().init(resources);
 
         });
@@ -33,7 +37,7 @@ class Game {
 
         this._canvas2 = document.getElementById("canvas2");
         this._canvas2.width = 400;
-        this._canvas2.style.width = "1100px";
+        this._canvas2.style.height = "90vh";
         this._canvas2.height = 290;
 
         this._MEGAMAN = new Player("Megaman", 950, 140, 15, 30, resources);
@@ -84,7 +88,7 @@ class Game {
 
         this._input.update();
         this._MEGAMAN.update();
-        
+
         this._camera.update(this._canvas2);
         this._camera.draw(this._canvas2);
         this._physics.update();

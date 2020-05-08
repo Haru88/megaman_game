@@ -46,11 +46,17 @@ class Level {
         const context = buffer.getContext(`2d`);
         context.fillStyle = `rgb(100, 130, 50)`;
 
-        tiles.forEach((tile) => {
+        for(let i = 0; i < tiles.length; ++i){
+            const tile = tiles[i];
+            if(i > this._widthIndex && !tiles[i - this._widthIndex].isSolid){
+                context.fillStyle = `rgb(50, 65, 25)`;
+            }else{
+                context.fillStyle = `rgb(100, 130, 50)`;
+            }
             if (tile.isSolid) {
                 context.fillRect(tile.posX, tile.posY, this._tileSize, this._tileSize);
             }
-        });
+        }
 
         context.strokeStyle = `rgb(40, 40, 0)`;
 
@@ -73,7 +79,7 @@ class Level {
 
         const context = buffer.getContext(`2d`);
 
-        const pattern = context.createPattern(img, 'repeat');
+        const pattern = context.createPattern(img.core, 'repeat');
         context.fillStyle = pattern;
         context.fillRect(0, 0, w, h);
 
