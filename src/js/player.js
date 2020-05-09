@@ -20,7 +20,7 @@ class Player extends Entities {
 
         this._spriteSetMap = new Map()
         for (let i = 0; i < 6; ++i) {
-            this._spriteSetMap.set(i, tmpHardcodedSpriteCrops(i, this._resources.get("playerSprite"), this._resources.get("playerSpriteMirror")));
+            this._spriteSetMap.set(i, tmpHardcodedSpriteCrops(i, this._resources.get("playerSprite"), this._resources.get("flippedPlayerSprite")));
         }
 
         this._sprites = this.spriteSets(0);
@@ -50,7 +50,7 @@ class Player extends Entities {
         const mapping = {}
         Object.keys(keyDown).forEach(key => {
             if (this._keyMap.has(key)) {
-                mapping[this._keyMap.get(key)] = true;
+                mapping[this._keyMap.get(key)] = keyDown[key];
             }
         });
         this._currState.onInput(mapping);
@@ -64,48 +64,41 @@ class Player extends Entities {
 
 function tmpHardcodedSpriteCrops(num, gImg, gImgM) {
 
-    const W = 50, H = 60;
-
-    const img = gImg;
-    const mImg = gImgM;
-
-    //standing Right
     const spriteMap = new Map();
     //standing Right
-    spriteMap.set(0, () => new SpriteAnimations(0, img, W, H,
-        new Sprite(...gImg.get(0, 0), 10)
+    spriteMap.set(0, () => new SpriteAnimations(0, gImg,
+        new Sprite(0, 0, 10)
     ));
     //standing Left
-    spriteMap.set(1, () => new SpriteAnimations(1, mImg, W, H,
-        new Sprite(...gImg.get(10, 0), 10)
+    spriteMap.set(1, () => new SpriteAnimations(1, gImgM, 
+        new Sprite(10, 0, 10)
     ));
-
     //walking Right
     const duration = 5;
-    spriteMap.set(2, () => new SpriteAnimations(2, img, W, H,
-        new Sprite(...gImg.get(1, 0), duration), new Sprite(...gImg.get(2, 0), duration),
-        new Sprite(...gImg.get(3, 0), duration), new Sprite(...gImg.get(4, 0), duration),
-        new Sprite(...gImg.get(5, 0), duration), new Sprite(...gImg.get(6, 0), duration),
-        new Sprite(...gImg.get(7, 0), duration), new Sprite(...gImg.get(8, 0), duration),
-        new Sprite(...gImg.get(9, 0), duration), new Sprite(...gImg.get(10, 0), duration)
+    spriteMap.set(2, () => new SpriteAnimations(2, gImg, 
+        new Sprite(1, 0, duration), new Sprite(2, 0, duration),
+        new Sprite(3, 0, duration), new Sprite(4, 0, duration),
+        new Sprite(5, 0, duration), new Sprite(6, 0, duration),
+        new Sprite(7, 0, duration), new Sprite(8, 0, duration),
+        new Sprite(9, 0, duration), new Sprite(10, 0, duration)
     ));
     //walking Left
-    spriteMap.set(3, () => new SpriteAnimations(3, mImg, W, H,
-        new Sprite(...gImg.get(10, 0), duration), new Sprite(...gImg.get(9, 0), duration),
-        new Sprite(...gImg.get(8, 0), duration), new Sprite(...gImg.get(7, 0), duration),
-        new Sprite(...gImg.get(6, 0), duration), new Sprite(...gImg.get(5, 0), duration),
-        new Sprite(...gImg.get(4, 0), duration), new Sprite(...gImg.get(3, 0), duration),
-        new Sprite(...gImg.get(2, 0), duration), new Sprite(...gImg.get(1, 0), duration)
+    spriteMap.set(3, () => new SpriteAnimations(3, gImgM,
+        new Sprite(10, 0, duration), new Sprite(9, 0, duration),
+        new Sprite(8, 0, duration), new Sprite(7, 0, duration),
+        new Sprite(6, 0, duration), new Sprite(5, 0, duration),
+        new Sprite(4, 0, duration), new Sprite(3, 0, duration),
+        new Sprite(2, 0, duration), new Sprite(1, 0, duration)
     ));
     //Jumping right
-    spriteMap.set(4, () => new SpriteAnimations(4, img, W, H,
-        new Sprite(...gImg.get(0, 2), 5), new Sprite(...gImg.get(1, 2), 5),
-        new Sprite(...gImg.get(2, 2), 5), new Sprite(...gImg.get(3, 2), 1000)
+    spriteMap.set(4, () => new SpriteAnimations(4, gImg, 
+        new Sprite(0, 2, 5), new Sprite(1, 2, 5),
+        new Sprite(2, 2, 5), new Sprite(3, 2, 1000)
     ));
     //Jumping Left
-    spriteMap.set(5, () => new SpriteAnimations(5, mImg, W, H,
-        new Sprite(...gImg.get(10, 2), 5), new Sprite(...gImg.get(9, 2), 5),
-        new Sprite(...gImg.get(8, 2), 5), new Sprite(...gImg.get(7, 2), 1000)
+    spriteMap.set(5, () => new SpriteAnimations(5, gImgM, 
+        new Sprite(10, 2, 5), new Sprite(9, 2, 5),
+        new Sprite(8, 2, 5), new Sprite(7, 2, 1000)
     ));
 
     return spriteMap.get(num);

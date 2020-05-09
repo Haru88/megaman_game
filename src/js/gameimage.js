@@ -1,17 +1,19 @@
 class GameImage {
 
-    constructor(img, tw = 0, th = 0) {
+    constructor(img, tileWidth = 0, tileHeight = 0) {
         this._img = img;
-        this._tw = tw;
-        this._th = th;
+        this._tileWidth = tileWidth;
+        this._tileHeight = tileHeight;
+
+        this._canvas = document.createElement("canvas");
     }
 
     get(x, y) {
-        return [x * this._tw, y * this._th];
+        return [x * this._tileWidth, y * this._tileHeight];
     }
 
-    mirrorY() {
-        const c = document.createElement("canvas");
+    flipY() {
+        const c = this._canvas;
         c.width = this._img.width;
         c.height = this._img.height;
         const context = c.getContext("2d");
@@ -23,11 +25,18 @@ class GameImage {
     }
 
     get tileSize() {
-        return [this._tw, this._th];
+        return [this._tileWidth, this._tileHeight];
     }
 
-    get core() {
+    get width(){
+        return this._img.width;
+    }
+
+    get height(){
+        return this._img.height;
+    }
+
+    get canvas() {
         return this._img;
     }
-
 }

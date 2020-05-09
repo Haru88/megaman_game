@@ -21,6 +21,9 @@ class Fall extends ActionState {
             e._direction = e.direction().right;
             e.velocity.x += e._ACCELERATION_X;
         }
+        if(keyDown[e._interalKeys.jump]){
+            keyDown[e._interalKeys.jump].pressed = true;
+        }
     }
 
     animate() {

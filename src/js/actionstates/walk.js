@@ -1,49 +1,43 @@
 class Walk extends ActionState{
 
     onUpdate() {
-        if (this._entity.headRight) {
-            this._entity.velocity.x += this._entity._ACCELERATION_X;
-
+        const e = this._entity;
+        if (e.headRight) {
+            e.velocity.x += e._ACCELERATION_X;
         } else {
-            this._entity.velocity.x -= this._entity._ACCELERATION_X;
-
+            e.velocity.x -= e._ACCELERATION_X;
         }
-        if(this._entity.velocity.y > 0){
-            this._entity.changeActionStateTo.fall();
-            
+        if(e.velocity.y > 0){
+            e.changeActionStateTo.fall();        
         }
     }
 
     onInput(keyDown) {
-        if (keyDown[this._entity._interalKeys.left]) {
-
-            this._entity._direction = this._entity.direction().left;
-        } else if (keyDown[this._entity._interalKeys.right]) {
-
-            this._entity._direction = this._entity.direction().right;
-        } else if (!keyDown[this._entity._interalKeys.left] && !keyDown[this._entity._interalKeys.right]) {
-
-            if (this._entity.velY == 0) {
-                this._entity.changeActionStateTo.stand();;
+        const e = this._entity;
+        if (keyDown[e._interalKeys.left]) {
+            e._direction = e.direction().left;
+        } else if (keyDown[e._interalKeys.right]) {
+            e._direction = e.direction().right;
+        } else if (!keyDown[e._interalKeys.left] && !keyDown[e._interalKeys.right]) {
+            if (e.velY == 0) {
+                e.changeActionStateTo.stand();;
             }
         }
-        if (keyDown[this._entity._interalKeys.jump]) {
-            this._entity.changeActionStateTo.jump();;
+        if (keyDown[e._interalKeys.jump] && !keyDown[e._interalKeys.jump].pressed) {
+            keyDown[e._interalKeys.jump].pressed = true;
+            e.changeActionStateTo.jump();
         }
-
     }
 
     animate() {
-        if (this._entity.headRight) {
-
-            if (this._entity._sprites.id !== 2) {
-
-                this._entity._sprites = this._entity.spriteSets(2);
+        const e = this._entity;
+        if (e.headRight) {
+            if (e._sprites.id !== 2) {
+                e._sprites = e.spriteSets(2);
             }
         } else {
-            if (this._entity._sprites.id !== 3) {
-
-                this._entity._sprites = this._entity.spriteSets(3);
+            if (e._sprites.id !== 3) {
+                e._sprites = e.spriteSets(3);
             }
         }
     }

@@ -71,7 +71,7 @@ class Level {
         };
     }
 
-    _createBackgroundLayer(img, w, h) {
+    _createBackgroundLayer(gImg, w, h) {
 
         const buffer = document.createElement(`canvas`);
         buffer.width = w;
@@ -79,7 +79,7 @@ class Level {
 
         const context = buffer.getContext(`2d`);
 
-        const pattern = context.createPattern(img.core, 'repeat');
+        const pattern = context.createPattern(gImg.canvas, 'repeat');
         context.fillStyle = pattern;
         context.fillRect(0, 0, w, h);
 

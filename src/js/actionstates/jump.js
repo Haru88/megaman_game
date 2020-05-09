@@ -1,41 +1,39 @@
 class Jump extends ActionState{
 
     onInit(){
-        this._entity._resources.get("jumpSound").play();
-        this._entity.velocity.y = -this._entity._ACCELERATION_Y;
+        const e = this._entity;
+        e._resources.get("jumpSound").play();
+        e.velocity.y = -this._entity._ACCELERATION_Y;
     }
 
     onUpdate(){
-        if(this._entity.velocity.y == 0){
-
-            this._entity.changeActionStateTo.fall();
+        const e = this._entity;
+        if(e.velocity.y == 0){
+            e.changeActionStateTo.fall();
         }
     }
 
     onInput(keyDown){
-        if (keyDown[this._entity._interalKeys.left]) {
-
-            this._entity._direction = this._entity.direction().left;
-            this._entity.velocity.x -= this._entity._ACCELERATION_X;  
-
-        } else if (keyDown[this._entity._interalKeys.right]) {
-
-            this._entity._direction = this._entity.direction().right;
-            this._entity.velocity.x += this._entity._ACCELERATION_X;
-
+        const e = this._entity;
+        if (keyDown[e._interalKeys.left]) {
+            e._direction = e.direction().left;
+            e.velocity.x -= e._ACCELERATION_X;
+        } else if (keyDown[e._interalKeys.right]) {
+            e._direction = e.direction().right;
+            e.velocity.x += e._ACCELERATION_X;
         }
     }
-d
-    animate(){
-        if (this._entity.headRight) {
 
-            if (this._entity._sprites.id !== 4) {
-                this._entity._sprites = this._entity.spriteSets(4);
+    animate(){
+        const e = this._entity;
+        if (e.headRight) {
+            if (e._sprites.id !== 4) {
+                e._sprites = e.spriteSets(4);
             }
         } else {
-            if (this._entity._sprites.id !== 5) {
-                this._entity._sprites = this._entity.spriteSets(5);
-            }
+            if (e._sprites.id !== 5) {
+                e._sprites = e.spriteSets(5);
+            } 
         }
     }   
 }
