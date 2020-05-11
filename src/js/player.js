@@ -19,7 +19,7 @@ class Player extends Entities {
         this._keyMap.set(" ", this._interalKeys.jump);
 
         this._spriteSetMap = new Map()
-        for (let i = 0; i < 6; ++i) {
+        for (let i = 0; i < 8; ++i) {
             this._spriteSetMap.set(i, tmpHardcodedSpriteCrops(i, this._resources.get("playerSprite"), this._resources.get("flippedPlayerSprite")));
         }
 
@@ -36,6 +36,7 @@ class Player extends Entities {
     }
 
     spriteSets(id) {
+        console.log(id);
         return this._spriteSetMap.get(id)();
     }
 
@@ -63,19 +64,21 @@ class Player extends Entities {
 
 
 function tmpHardcodedSpriteCrops(num, gImg, gImgM) {
-
     const spriteMap = new Map();
     //standing Right
-    spriteMap.set(0, () => new SpriteAnimations(0, gImg,
+    spriteMap.set(0, 
+        () => new SpriteAnimations(0, gImg,
         new Sprite(0, 0, 10)
     ));
     //standing Left
-    spriteMap.set(1, () => new SpriteAnimations(1, gImgM, 
+    spriteMap.set(1, 
+        () => new SpriteAnimations(1, gImgM, 
         new Sprite(10, 0, 10)
     ));
     //walking Right
     const duration = 5;
-    spriteMap.set(2, () => new SpriteAnimations(2, gImg, 
+    spriteMap.set(2, 
+        () => new SpriteAnimations(2, gImg, 
         new Sprite(1, 0, duration), new Sprite(2, 0, duration),
         new Sprite(3, 0, duration), new Sprite(4, 0, duration),
         new Sprite(5, 0, duration), new Sprite(6, 0, duration),
@@ -83,7 +86,8 @@ function tmpHardcodedSpriteCrops(num, gImg, gImgM) {
         new Sprite(9, 0, duration), new Sprite(10, 0, duration)
     ));
     //walking Left
-    spriteMap.set(3, () => new SpriteAnimations(3, gImgM,
+    spriteMap.set(3, 
+        () => new SpriteAnimations(3, gImgM,
         new Sprite(10, 0, duration), new Sprite(9, 0, duration),
         new Sprite(8, 0, duration), new Sprite(7, 0, duration),
         new Sprite(6, 0, duration), new Sprite(5, 0, duration),
@@ -91,15 +95,26 @@ function tmpHardcodedSpriteCrops(num, gImg, gImgM) {
         new Sprite(2, 0, duration), new Sprite(1, 0, duration)
     ));
     //Jumping right
-    spriteMap.set(4, () => new SpriteAnimations(4, gImg, 
+    spriteMap.set(4, 
+        () => new SpriteAnimations(4, gImg, 
         new Sprite(0, 2, 5), new Sprite(1, 2, 5),
         new Sprite(2, 2, 5), new Sprite(3, 2, 1000)
     ));
     //Jumping Left
-    spriteMap.set(5, () => new SpriteAnimations(5, gImgM, 
+    spriteMap.set(5, 
+        () => new SpriteAnimations(5, gImgM, 
         new Sprite(10, 2, 5), new Sprite(9, 2, 5),
         new Sprite(8, 2, 5), new Sprite(7, 2, 1000)
     ));
-
+    //fall right
+    spriteMap.set(6, 
+        () => new SpriteAnimations(6, gImg,
+        new Sprite(3, 2, 100)
+    ));
+    //fall left
+    spriteMap.set(7, 
+        () => new SpriteAnimations(7, gImgM,
+        new Sprite(7, 2, 100)
+    ));
     return spriteMap.get(num);
 }

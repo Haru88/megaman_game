@@ -29,12 +29,12 @@ class Fall extends ActionState {
     animate() {
         const e = this._entity;
         if (e.headRight) {
-            if (e._sprites.id !== 4) {
-                e._sprites = e.spriteSets(4);
+            if (e._sprites.id !== 6) {
+                e._sprites = e.spriteSets(6);
             }
         } else {
-            if (e._sprites.id !== 5) {
-                e._sprites = e.spriteSets(5);
+            if (e._sprites.id !== 7) {
+                e._sprites = e.spriteSets(7);
             } 
         }
     }

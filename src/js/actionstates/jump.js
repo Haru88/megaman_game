@@ -15,6 +15,11 @@ class Jump extends ActionState{
 
     onInput(keyDown){
         const e = this._entity;
+        if(!keyDown[e._interalKeys.jump]){
+            if(e.velocity.y < 0){
+                e.velocity.y = 0;
+            }
+        }
         if (keyDown[e._interalKeys.left]) {
             e._direction = e.direction().left;
             e.velocity.x -= e._ACCELERATION_X;
