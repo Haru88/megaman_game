@@ -5,88 +5,119 @@ class TileCollision {
         this._level = level;
     }
 
-    _check(positions, marker, callback) {
-        const matches = [];
+    down(entity) {
 
-        positions.forEach(e => {
-            const tile = this._level.getTileByPosition(e[0], e[1]);
-            if (tile && tile.isSolid) {
-                matches.push(tile);
+        let tile = { isSolid: false, isJumpThrough: false };
+        for (let tilePos = entity.posY; !tile.isSolid && !tile.isJumpThrough; tilePos += this._level.tileSize) {
+
+            const findings = [this._level.getTileByPosition(entity.bounds.left, tilePos),
+            this._level.getTileByPosition(entity.bounds.centerX, tilePos),
+            this._level.getTileByPosition(entity.bounds.right, tilePos)
+            ];
+
+            for (const f of findings) {
+                if (f && f.isSolid || f && f.isJumpThrough) {
+                    tile = f;
+                    break;
+                }
             }
-        })
+        }
 
-        for (const tile of matches) {
-            this._level.marker.get(marker).y = tile.posY;
-            this._level.marker.get(marker).x = tile.posX;
-
-            return callback(tile);
+        if(tile.isSolid || tile.isJumpThrough){
+            this._level.marker.get("d").y = tile.posY;
+            this._level.marker.get("d").x = tile.posX;
+    
+            if (entity.bounds.bottom < tile.bounds.top + 1 && //this line is only for the jumpThrough-purpose
+                (entity.bounds.bottom + entity.velocity.y) > tile.bounds.top) {
+                entity.velocity.y = 0;
+                entity.position.y = tile.bounds.top - entity.height;
+            }
         }
     }
 
-    right(entity) {
-        return this._check(
-            [[entity.bounds.right + this._offset, entity.bounds.top],
-            [entity.bounds.right + this._offset, entity.bounds.centerY],
-            [entity.bounds.right + this._offset, entity.bounds.bottom - 2]
-            ],
-            "x",
-            tile => {
-                if (entity.velocity.x > 0) {
-                    return true;
+    up(entity) {
+
+        let tile = { isSolid: false };
+        for (let tilePos = entity.posY; !tile.isSolid && tilePos > 0; tilePos += this._level.tileSize * -1) {
+
+            const range = [entity.bounds.left, entity.bounds.centerX, entity.bounds.right];
+
+            for (const r of range) {
+                const f = this._level.getTileByPosition(r, tilePos);
+                if (f && f.isSolid) {
+                    tile = f;
+                    break;
                 }
-                return false;
             }
-        );
+        }
+
+        if (tile.isSolid) {
+            this._level.marker.get("t").y = tile.posY;
+            this._level.marker.get("t").x = tile.posX;
+
+            if ((entity.bounds.top + entity.velocity.y) < tile.bounds.bottom) {
+                entity.velocity.y = 0;
+                entity.position.y = tile.bounds.bottom + 1;
+            }
+        }
+    }
+
+
+    right(entity) {
+
+        let tile = { isSolid: false };
+        for (let tilePos = entity.posX; !tile.isSolid; tilePos += this._level.tileSize) {
+
+            const findings = [
+                this._level.getTileByPosition(tilePos, entity.bounds.top),
+                this._level.getTileByPosition(tilePos, entity.bounds.centerY),
+                this._level.getTileByPosition(tilePos, entity.bounds.bottom - 2)];
+
+            for (const f of findings) {
+                if (f && f.isSolid) {
+                    tile = f;
+                    break;
+                }
+            }
+        }
+
+        if (tile.isSolid) {
+            this._level.marker.get("r").y = tile.posY;
+            this._level.marker.get("r").x = tile.posX;
+
+            if ((entity.bounds.right + entity.velocity.x) >= tile.bounds.left - 1) {
+                entity.velocity.x = 0;
+                entity.position.x = tile.bounds.left - entity.width - 1;
+            }
+        }
+        return false;
     }
 
     left(entity) {
-        return this._check(
-            [[entity.bounds.left - this._offset, entity.bounds.top],
-            [entity.bounds.left - this._offset, entity.bounds.centerY],
-            [entity.bounds.left - this._offset, entity.bounds.bottom - 2]
-            ],
-            "x",
-            tile => {
-                if (entity.velocity.x < 0) {
-                    return true;
+
+        let tile = { isSolid: false };
+        for (let tilePos = entity.posX; !tile.isSolid; tilePos -= this._level.tileSize) {
+
+            const findings = [
+                this._level.getTileByPosition(tilePos, entity.bounds.top),
+                this._level.getTileByPosition(tilePos, entity.bounds.centerY),
+                this._level.getTileByPosition(tilePos, entity.bounds.bottom - 2)];
+
+            for (const f of findings) {
+                if (f && f.isSolid) {
+                    tile = f;
+                    break;
                 }
-                return false;
             }
-        );
-    }
+        }
 
-    Y(entity) {
+        if (tile.isSolid) {
+            this._level.marker.get("l").y = tile.posY;
+            this._level.marker.get("l").x = tile.posX;
 
-        const matches = [];
-
-        [[entity.bounds.centerX, entity.bounds.bottom],
-        [entity.bounds.left, entity.bounds.bottom],
-        [entity.bounds.right, entity.bounds.bottom],
-        [entity.bounds.centerX, entity.bounds.top],
-        [entity.bounds.left, entity.bounds.top],
-        [entity.bounds.right, entity.bounds.top],
-        ]
-
-            .forEach(e => {
-                const tile = this._level.getTileByPosition(e[0], e[1]);
-                if (tile && tile.isSolid) {
-                    matches.push(tile);
-                }
-            })
-
-        for (const tile of matches) {
-            this._level.marker.get(`y`).y = tile.posY;
-            this._level.marker.get(`y`).x = tile.posX;
-
-            if (entity.velocity.y > 0) {
-                entity.position.y = tile.position.y - entity.height;
-                entity.velocity.y = 0;
-                break;
-            } else if (entity.velocity.y < 0) {
-                //console.log("top collision occured", entity.position, tile.position);
-                entity.position.y = tile.position.y + tile.height;
-                entity.velocity.y = 0.01;
-                break;
+            if ((entity.bounds.left + entity.velocity.x) < tile.bounds.right + 1) {
+                entity.velocity.x = 0;
+                entity.position.x = tile.bounds.right + 1;
             }
         }
     }

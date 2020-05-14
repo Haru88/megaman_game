@@ -1,4 +1,3 @@
-
 const path = "https://informatik.hs-bremerhaven.de/tfiedler1/";
 
 fetch(path + "games/megaman_game/res/level/devLevel.json")
@@ -14,6 +13,7 @@ fetch(path + "games/megaman_game/res/level/devLevel.json")
                 Loader.Imagefile("backgroundImage", /*levelData.backgroundImageURL*/path + "games/megaman_res/bg2.png"),
                 Loader.Audiofile("jumpSound", path + "games/megaman_res/flicker.wav"),
                 Loader.Audiofile("landSound", path + "games/megaman_res/land.wav"),
+                Loader.Audiofile("slideSound", path + "games/megaman_res/slide.wav"),
                 Loader.Audiofile("mm7level", path + "games/megaman_res/mm7ruinedhighway.mp3")
             ])
 
@@ -35,7 +35,7 @@ fetch(path + "games/megaman_game/res/level/devLevel.json")
         CANVAS.width = 400;
         CANVAS.height = 290;
 
-        const MEGAMAN = new Player("Megaman", 950, 140, 15, 30, resources);
+        const MEGAMAN = new Player("Megaman", 950, 194, 15, 30, resources);
 
         const INPUT = new Input(MEGAMAN);
 
@@ -43,19 +43,28 @@ fetch(path + "games/megaman_game/res/level/devLevel.json")
         PHYSICS.add(MEGAMAN);
 
         const CAMERA = new Camera(0, 0, LEVEL, MEGAMAN);
+        //CAMERA.turnDebugMode();
 
         const RENDERER = new Renderer();
+        RENDERER.deltaSpeed = 12;
 
-        RENDERER.onTickBefore(() => {
-
-            INPUT.update();
-
+        RENDERER.onTickBefore(delta => {
+            INPUT.update();               
             MEGAMAN.update();
-            CAMERA.update(CANVAS);
         })
 
         RENDERER.onRender(60, () => {
+ 
+            CAMERA.update(CANVAS);
             CAMERA.draw(CANVAS);
+
+            if (INPUT.keyPressed("t")) {
+                MEGAMAN.position.y -= LEVEL.tileSize/4;
+            }
+
+            if (INPUT.keyPressed("g")) {
+                MEGAMAN.position.y += LEVEL.tileSize/4;
+            }
 
             if (INPUT.keyPressed("p")) {
                 RENDERER.pause();
@@ -66,8 +75,8 @@ fetch(path + "games/megaman_game/res/level/devLevel.json")
             }
         });
 
-        RENDERER.onTickAfter(() => {
-            PHYSICS.update();
+        RENDERER.onTickAfter(delta => {
+            PHYSICS.update(delta);   
         })
 
         RENDERER.start();

@@ -23,8 +23,13 @@ class Level {
         data.tiles.area.forEach(tile => {
             for (let i = tile.x; i < tile.w; ++i) {
                 for (let j = tile.y; j < tile.h; ++j) {
-                    if (i >= 0 && i < this._widthIndex && j >= 0 && j < this._heightIndex && tile.solid) {
-                        this._tiles[j * this._widthIndex + i].solid = true;
+                    if (i >= 0 && i < this._widthIndex && j >= 0 && j < this._heightIndex) {
+                        if(tile.solid){
+                            this._tiles[j * this._widthIndex + i].solid = true;
+                        }
+                        if(tile.jumpThrough){
+                            this._tiles[j * this._widthIndex + i].jumpThrough = true;
+                        }    
                     }
                 }
             }
@@ -55,6 +60,10 @@ class Level {
             }
             if (tile.isSolid) {
                 context.fillRect(tile.posX, tile.posY, this._tileSize, this._tileSize);
+            }
+            if (tile.isJumpThrough) {
+                context.fillStyle = `rgb(40, 40, 0)`;
+                context.fillRect(tile.posX, tile.posY, this._tileSize, 4);
             }
         }
 

@@ -3,67 +3,44 @@ class Physics {
     constructor(level) {
         this._entities = [];
         this._level = level;
-
         this._tileCollision = new TileCollision(4, this._level);
-
     }
 
-    update() {
+    update(delta) {
         this._entities.forEach(entity => {
-
             this._level.marker.clear();
-
-            this._gravity(entity);
+            //X
             this._friction(entity);
-
-            entity.updatePosY();
-            this._tileCollision.Y(entity);
-
-            //entity.updatePosX();    
-            //this.X(entity);
-
-            /*if (this._tileCollision.top(entity) ||
-                this._tileCollision.bottom(entity)) {
-                entity.velocity.y = 0;
-            } else {
-                entity.updatePosY();
-            }*/
-
-            if (this._tileCollision.right(entity) ||
-                this._tileCollision.left(entity)) {
-                entity.velocity.x = 0;
-            } else {
-                entity.updatePosX();
+            if(entity.velocity.x > 0){
+                this._tileCollision.right(entity);
+            }else if(entity.velocity.x < 0){
+                this._tileCollision.left(entity);
             }
+            entity.position.x += entity.velX;
+            //Y
+            this._gravity(entity);
+            if(entity.velocity.y < 0){
+                this._tileCollision.up(entity);
+            }else{
+                this._tileCollision.down(entity);
+            }
+            entity.position.y += entity.velY;  
+            
         });
     }
 
     _gravity(entity) {
-
-        if (entity.bounds.bottom < this._level.heightPX) {
-            entity.velocity.y += this._level.gravity;
-            entity.velocity.y = entity.velocity.y < entity.maxVel.y ? entity.velocity.y : entity.maxVel.y;
-        }
+        if (entity.bounds.bottom < this._level.heightPX) {        
+            entity.velocity.y += 0.9//this._level.gravity; 
+            entity.velocity.y *= 0.9; 
+        }  
     }
 
     _friction(entity) {
-
-        if (entity.velocity.x > 0) {
-            entity.velocity.x -= this._level.friction;
-
-            if (entity.velocity.x < 0) {
-                entity.velocity.x = 0;
-            }
-        } else if (entity.velocity.x < 0) {
-            entity.velocity.x += this._level.friction;
-
-            if (entity.velocity.x > 0) {
-                entity.velocity.x = 0;
-            }
-        }
+        entity.velocity.x *= 0.7//this._level.friction;
     }
 
-    _collide(entity, another) {
+    _collide(entity, another) {a
         if (entity.bounds.bottom > another.bounds.top &&
             entity.bounds.top < another.bounds.bottom &&
             entity.bounds.right > another.bounds.left &&

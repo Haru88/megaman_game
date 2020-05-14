@@ -1,12 +1,12 @@
 class Renderer {
 
     constructor() {
-        this._tickSpeed = 10;
+        this._deltaSpeed = 17;
         this._pause = false;
     }
 
-    set tickSpeed(ms){
-        this._tickSpeed = ms;
+    set deltaSpeed(ms){
+        this._deltaSpeed = ms;
         return this;
     }
 
@@ -30,8 +30,8 @@ class Renderer {
     start() {
         let frames = 0;
 
-        let lastStamp = performance.now();
-        let tickStamp = lastStamp;
+        let prevTime = performance.now();
+        let prevTicks = prevTime;
 
         const RENDER = () => {
 
@@ -40,25 +40,27 @@ class Renderer {
             frames++;
 
             const now = performance.now();
-            const elapsed = now - lastStamp;
-            const elapsedTicks = now - tickStamp;
+            const elapsed = now - prevTime;
+            const deltaTime = now - prevTime;
 
-            if (!this._pause && elapsedTicks >= this._tickSpeed) {
-                this._onTickBeforeEvent();
+            if (!this._pause && deltaTime >= this._deltaSpeed) {
+                this._onTickBeforeEvent(deltaTime);
             }
 
-            if (elapsed >= 1000) {
+            if (deltaTime >= 1000) {
                 document.getElementById("fps").innerHTML = frames + " FPS";
-                lastStamp = performance.now();
+                
                 frames = 0;
             }
 
             this._onFrameEvent();
 
-            if (!this._pause && elapsedTicks >= this._tickSpeed) {
-                this._onTickAfterEvent();
-                tickStamp = performance.now();
+            if (!this._pause && deltaTime >= this._deltaSpeed) {              
+                //prevTicks = performance.now();
+                this._onTickAfterEvent(deltaTime);
             }
+
+            prevTime = performance.now();
 
         };
 

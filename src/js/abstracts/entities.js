@@ -9,30 +9,30 @@ class Entities {
         this._name = name;
         this._resources = resources;
         this._direction = this.direction().right;
-        this._ACCELERATION_X = 0.8;
-        this._ACCELERATION_Y = 10.5;
-        this._MAX_VELOCITY_X = 2.5;
-        this._MAX_VELOCITY_Y = 9;
-
+        this._ACCELERATION_X = 1.3;
+        this._ACCELERATION_Y = 16;
         this._health = 1;
         this._maxHealth = 1;
-    }
-
-    updatePosX(){
-        this.velocity.x = this.velocity.x > this._MAX_VELOCITY_X ? this._MAX_VELOCITY_X : this.velocity.x
-        this.velocity.x = this.velocity.x < -this._MAX_VELOCITY_X ? -this._MAX_VELOCITY_X : this.velocity.x
-        this.position.x += this.velX;
-    }
-
-    updatePosY(){
-        this.velocity.y = this.velocity.y > this._MAX_VELOCITY_Y ? this._MAX_VELOCITY_Y : this.velocity.y
-        this.velocity.y = this.velocity.y < -this._MAX_VELOCITY_Y ? -this._MAX_VELOCITY_Y : this.velocity.y
-        this.position.y += this.velY;
     }
 
     input(keyDown) { }
 
     draw(context, x, y) { }
+
+    direction() {
+        return {
+            right: 1,
+            left: -1
+        }
+    }
+
+    copy() {
+        return JSON.parse(JSON.stringify(this));
+    }
+
+    get headRight(){
+        return this._direction === this.direction().right;
+    }
 
     get bounds() {
         return {
@@ -45,30 +45,8 @@ class Entities {
         }
     }
 
-    direction() {
-        return {
-            right: 1,
-            left: 2
-        }
-    }
-
-    copy() {
-        return JSON.parse(JSON.stringify(this));
-    }
-
-    get headRight(){
-        return this._direction === this.direction().right;
-    }
-
     get name(){
         return this._name;
-    }
-
-    get maxVel() {
-        return {
-            x: this._MAX_VELOCITY_X,
-            y: this._MAX_VELOCITY_Y
-        }
     }
 
     get velX() {

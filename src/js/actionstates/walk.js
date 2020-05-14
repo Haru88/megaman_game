@@ -1,6 +1,7 @@
 class Walk extends ActionState{
 
     onUpdate() {
+        ++this._tickCounter;
         const e = this._entity;
         if (e.headRight) {
             e.velocity.x += e._ACCELERATION_X;
@@ -22,6 +23,10 @@ class Walk extends ActionState{
             if (e.velY == 0) {
                 e.changeActionStateTo.stand();;
             }
+        }
+        if (this._tickCounter > 10 && keyDown[e._interalKeys.dash] && !keyDown[e._interalKeys.dash].pressed) {
+            keyDown[e._interalKeys.dash].pressed = true;
+            e.changeActionStateTo.dash();
         }
         if (keyDown[e._interalKeys.jump] && !keyDown[e._interalKeys.jump].pressed) {
             keyDown[e._interalKeys.jump].pressed = true;
