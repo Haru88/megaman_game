@@ -4,9 +4,9 @@ class Walk extends ActionState{
         ++this._tickCounter;
         const e = this._entity;
         if (e.headRight) {
-            e.velocity.x += e._ACCELERATION_X;
+            e.velocity.x += e._currAccelerationX;
         } else {
-            e.velocity.x -= e._ACCELERATION_X;
+            e.velocity.x -= e._currAccelerationX;
         }
         if(e.velocity.y > 0){
             e.changeActionStateTo.fall();        

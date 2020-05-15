@@ -21,7 +21,7 @@ class Stand extends ActionState{
             e.changeActionStateTo.jump();
         } else if (this._tickCounter > 10 && keyDown[e._interalKeys.dash] && !keyDown[e._interalKeys.dash].pressed) {
             keyDown[e._interalKeys.dash].pressed = true;
-            e.changeActionStateTo.dash();
+            //e.changeActionStateTo.dash();
         }
     }
 

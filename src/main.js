@@ -35,7 +35,7 @@ fetch(path + "games/megaman_game/res/level/devLevel.json")
         CANVAS.width = 400;
         CANVAS.height = 290;
 
-        const MEGAMAN = new Player("Megaman", 950, 194, 15, 30, resources);
+        const MEGAMAN = new Player("Megaman", 950, 194, 20, 30, resources);
 
         const INPUT = new Input(MEGAMAN);
 

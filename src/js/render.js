@@ -29,9 +29,7 @@ class Renderer {
 
     start() {
         let frames = 0;
-
         let prevTime = performance.now();
-        let prevTicks = prevTime;
 
         const RENDER = () => {
 
@@ -40,8 +38,9 @@ class Renderer {
             frames++;
 
             const now = performance.now();
-            const elapsed = now - prevTime;
             const deltaTime = now - prevTime;
+
+            //console.log((deltaTime/1000).toFixed(3));
 
             if (!this._pause && deltaTime >= this._deltaSpeed) {
                 this._onTickBeforeEvent(deltaTime);
@@ -49,14 +48,12 @@ class Renderer {
 
             if (deltaTime >= 1000) {
                 document.getElementById("fps").innerHTML = frames + " FPS";
-                
                 frames = 0;
             }
 
             this._onFrameEvent();
 
             if (!this._pause && deltaTime >= this._deltaSpeed) {              
-                //prevTicks = performance.now();
                 this._onTickAfterEvent(deltaTime);
             }
 

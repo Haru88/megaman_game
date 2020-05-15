@@ -86,6 +86,7 @@ class TileCollision {
             this._level.marker.get("r").x = tile.posX;
 
             if ((entity.bounds.right + entity.velocity.x) >= tile.bounds.left - 1) {
+                entity._currAccelerationX = entity._baseAccelerationX;
                 entity.velocity.x = 0;
                 entity.position.x = tile.bounds.left - entity.width - 1;
             }
@@ -116,6 +117,7 @@ class TileCollision {
             this._level.marker.get("l").x = tile.posX;
 
             if ((entity.bounds.left + entity.velocity.x) < tile.bounds.right + 1) {
+                entity._currAccelerationX = entity._baseAccelerationX;
                 entity.velocity.x = 0;
                 entity.position.x = tile.bounds.right + 1;
             }

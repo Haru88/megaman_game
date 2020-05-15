@@ -52,9 +52,9 @@ class Camera {
 
         //Entities
         this._entities.forEach(entity => {
-            if(!this._debug){
+            //if(!this._debug){
                 entity.draw(context, entity.posX - this._sx, entity.posY - this._sy);
-            }       
+            //}       
         });
     }
 

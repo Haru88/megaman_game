@@ -16,10 +16,10 @@ class Fall extends ActionState {
         const e = this._entity;
         if (keyDown[e._interalKeys.left]) {
             e._direction = e.direction().left;
-            e.velocity.x -= e._ACCELERATION_X;
+            e.velocity.x -= e._currAccelerationX;
         } else if (keyDown[e._interalKeys.right]) {
             e._direction = e.direction().right;
-            e.velocity.x += e._ACCELERATION_X;
+            e.velocity.x += e._currAccelerationX;
         }
         if(keyDown[e._interalKeys.jump]){
             keyDown[e._interalKeys.jump].pressed = true;

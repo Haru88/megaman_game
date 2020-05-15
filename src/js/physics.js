@@ -4,40 +4,40 @@ class Physics {
         this._entities = [];
         this._level = level;
         this._tileCollision = new TileCollision(4, this._level);
+
+        this._gravity = 0.5; //this._level.gravity; 
+        this._friction = 0.7; //this._level.friction;
     }
 
     update(delta) {
         this._entities.forEach(entity => {
             this._level.marker.clear();
+
             //X
-            this._friction(entity);
+            entity.velocity.x *= this._friction;
+
             if(entity.velocity.x > 0){
                 this._tileCollision.right(entity);
             }else if(entity.velocity.x < 0){
                 this._tileCollision.left(entity);
             }
-            entity.position.x += entity.velX;
-            //Y
-            this._gravity(entity);
+            entity.position.x += entity.velX// * delta;
+
+
+            //Y  
+            entity.velocity.y += this._gravity;   
+
             if(entity.velocity.y < 0){
                 this._tileCollision.up(entity);
             }else{
                 this._tileCollision.down(entity);
-            }
-            entity.position.y += entity.velY;  
-            
+            }          
+            entity.position.y += entity.velY// * delta; 
+
+            if(entity._currAccelerationX > entity._baseAccelerationX){
+                entity._currAccelerationX *= 0.99;
+            }  
         });
-    }
-
-    _gravity(entity) {
-        if (entity.bounds.bottom < this._level.heightPX) {        
-            entity.velocity.y += 0.9//this._level.gravity; 
-            entity.velocity.y *= 0.9; 
-        }  
-    }
-
-    _friction(entity) {
-        entity.velocity.x *= 0.7//this._level.friction;
     }
 
     _collide(entity, another) {a

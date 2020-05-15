@@ -8,13 +8,15 @@ class Jump extends ActionState{
 
     onUpdate(){
         const e = this._entity;
+        ++this._tickCounter;
         if(e.velocity.y == 0){
             e.changeActionStateTo.fall();
         }
     }
 
-    onInput(keyDown){
+    onInput(keyDown){      
         const e = this._entity;
+
         if(!keyDown[e._interalKeys.jump]){
             if(e.velocity.y < 0){
                 e.velocity.y = 0;
@@ -22,10 +24,10 @@ class Jump extends ActionState{
         }
         if (keyDown[e._interalKeys.left]) {
             e._direction = e.direction().left;
-            e.velocity.x -= e._ACCELERATION_X;
+            e.velocity.x -= e._currAccelerationX;
         } else if (keyDown[e._interalKeys.right]) {
             e._direction = e.direction().right;
-            e.velocity.x += e._ACCELERATION_X;
+            e.velocity.x += e._currAccelerationX;
         }
     }
 

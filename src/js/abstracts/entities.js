@@ -9,8 +9,9 @@ class Entities {
         this._name = name;
         this._resources = resources;
         this._direction = this.direction().right;
-        this._ACCELERATION_X = 1.3;
-        this._ACCELERATION_Y = 16;
+        this._baseAccelerationX = 1.3;
+        this._currAccelerationX = this._baseAccelerationX;
+        this._ACCELERATION_Y = 8;
         this._health = 1;
         this._maxHealth = 1;
     }

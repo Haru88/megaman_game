@@ -10,15 +10,18 @@ class Player extends Entities {
             left: Symbol("left"),
             right: Symbol("right"),
             jump: Symbol("jump"),
-            jump: Symbol("dash"),
+            dash: Symbol("dash"),
+            down: Symbol("down"),
+            up: Symbol("up"),
         }
 
         this._keyMap = new Map();
         this._keyMap.set("a", this._interalKeys.left);
         this._keyMap.set("d", this._interalKeys.right);
-        this._keyMap.set("w", this._interalKeys.jump);
+        this._keyMap.set("w", this._interalKeys.up);
         this._keyMap.set(" ", this._interalKeys.jump);
         this._keyMap.set("e", this._interalKeys.dash);
+        this._keyMap.set("s", this._interalKeys.down);
 
         this._spriteSetMap = new Map()
         for (let i = 0; i < 10; ++i) {
@@ -60,7 +63,7 @@ class Player extends Entities {
     }
 
     draw(context, x, y) {
-        context.drawImage(...this._sprites.draw(x - this.width, y - this.height));
+        context.drawImage(...this._sprites.draw(x - this.width/1.4, y - this.height+1));
     }
 }
 
@@ -89,11 +92,11 @@ function tmpHardcodedSpriteCrops(num, gImg, gImgM) {
     //walking Left
     spriteMap.set(3,
         () => new SpriteAnimations(3, gImgM,
-            new Sprite(10, 0, duration), new Sprite(9, 0, duration),
-            new Sprite(8, 0, duration), new Sprite(7, 0, duration),
-            new Sprite(6, 0, duration), new Sprite(5, 0, duration),
-            new Sprite(4, 0, duration), new Sprite(3, 0, duration),
-            new Sprite(2, 0, duration), new Sprite(1, 0, duration)
+            new Sprite(9, 0, duration), new Sprite(8, 0, duration),
+            new Sprite(7, 0, duration), new Sprite(6, 0, duration),
+            new Sprite(5, 0, duration), new Sprite(4, 0, duration),
+            new Sprite(3, 0, duration), new Sprite(2, 0, duration),
+            new Sprite(1, 0, duration), new Sprite(0, 0, duration)
         ));
     //Jumping right
     spriteMap.set(4,
