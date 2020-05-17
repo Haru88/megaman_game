@@ -47,13 +47,14 @@ fetch(path + "games/megaman_game/res/level/devLevel.json")
 
         const RENDERER = new Renderer();
         RENDERER.deltaSpeed = 12;
+        RENDERER.fpsLock = 60;
 
         RENDERER.onTickBefore(delta => {
             INPUT.update();               
             MEGAMAN.update();
         })
 
-        RENDERER.onRender(60, () => {
+        RENDERER.onRender(() => {
  
             CAMERA.update(CANVAS);
             CAMERA.draw(CANVAS);

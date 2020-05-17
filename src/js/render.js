@@ -1,13 +1,26 @@
 class Renderer {
 
     constructor() {
+        this.fpsLock = 60;
         this._deltaSpeed = 17;
         this._pause = false;
     }
 
-    set deltaSpeed(ms){
+    set deltaSpeed(ms) {
         this._deltaSpeed = ms;
         return this;
+    }
+
+    set fpsLock(fps) {
+        this._fpsLock = {
+            interval: 1000 / fps,
+            value: fps
+        };
+        return this;
+    }
+
+    get fpsLock() {
+        return this._fpsLock;
     }
 
     onTickBefore(callback = () => { }) {
@@ -18,47 +31,48 @@ class Renderer {
         this._onTickAfterEvent = callback;
     }
 
-    onRender(fps, callback = () => { }) {
-        this._fpsLock = fps;
-        this._onFrameEvent = callback;
+    onRender(callback = () => { }) {
+        this._onRender = callback;
     }
 
-    pause(){
+    pause() {
         this._pause = !this._pause;
     }
 
     start() {
-        let frames = 0;
-        let prevTime = performance.now();
 
-        const RENDER = () => {
+        let lastTime = performance.now();
+        let second = performance.now();
+        let frames = 0;
+
+        const RENDER = time => {
 
             requestAnimationFrame(RENDER);
 
-            frames++;
+            const currInterval = time - lastTime; //timeBetweenFrames
 
-            const now = performance.now();
-            const deltaTime = now - prevTime;
-
-            //console.log((deltaTime/1000).toFixed(3));
-
-            if (!this._pause && deltaTime >= this._deltaSpeed) {
-                this._onTickBeforeEvent(deltaTime);
+            if (currInterval >= this.fpsLock.interval) {
+                frames++;
+                lastTime = time - (currInterval % this.fpsLock.interval);
+            } else {
+                return;
             }
 
-            if (deltaTime >= 1000) {
+            if (performance.now() - second >= 1000) {
                 document.getElementById("fps").innerHTML = frames + " FPS";
                 frames = 0;
+                second = performance.now();
             }
 
-            this._onFrameEvent();
-
-            if (!this._pause && deltaTime >= this._deltaSpeed) {              
-                this._onTickAfterEvent(deltaTime);
+            if (!this._pause && currInterval >= this._deltaSpeed) {
+                this._onTickBeforeEvent(currInterval);
             }
 
-            prevTime = performance.now();
+            this._onRender();
 
+            if (!this._pause && currInterval >= this._deltaSpeed) {
+                this._onTickAfterEvent(currInterval);
+            }
         };
 
         requestAnimationFrame(RENDER);
