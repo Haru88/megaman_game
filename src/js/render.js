@@ -23,16 +23,19 @@ class Renderer {
         return this._fpsLock;
     }
 
-    onTickBefore(callback = () => { }) {
-        this._onTickBeforeEvent = callback;
+    onUpdateBeforeRender(callback = () => { }) {
+        this._onUpdateBeforeRender = callback;
+        return this;
     }
 
-    onTickAfter(callback = () => { }) {
-        this._onTickAfterEvent = callback;
+    onUpdateAfterRender(callback = () => { }) {
+        this._onUpdateAfterRender = callback;
+        return this;
     }
 
     onRender(callback = () => { }) {
         this._onRender = callback;
+        return this;
     }
 
     pause() {
@@ -64,14 +67,14 @@ class Renderer {
                 second = performance.now();
             }
 
-            if (!this._pause && currInterval >= this._deltaSpeed) {
-                this._onTickBeforeEvent(currInterval);
+            if (!this._pause /*&& currInterval >= this._deltaSpeed*/) {
+                this._onUpdateBeforeRender(currInterval);
             }
 
             this._onRender();
 
-            if (!this._pause && currInterval >= this._deltaSpeed) {
-                this._onTickAfterEvent(currInterval);
+            if (!this._pause /*&& currInterval >= this._deltaSpeed*/) {
+                this._onUpdateAfterRender(currInterval);
             }
         };
 

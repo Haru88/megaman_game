@@ -13,6 +13,7 @@ class Player extends Entities {
             dash: Symbol("dash"),
             down: Symbol("down"),
             up: Symbol("up"),
+            stand: Symbol("stand"),
         }
 
         this._keyMap = new Map();
@@ -29,6 +30,8 @@ class Player extends Entities {
         }
 
         this._sprites = this.spriteSets(0);
+        
+        this.fallThrough = false;
     }
 
     get changeActionStateTo() {
@@ -65,6 +68,19 @@ class Player extends Entities {
     draw(context, x, y) {
         context.drawImage(...this._sprites.draw(x - this.width/1.4, y - this.height+1));
     }
+}
+
+function tmpHardcodedSpriteCrops2(key, gImg, gImgM) {
+    const spriteMap = new Map();
+    spriteMap.set(this._interalKeys.stand, dir =>{
+        if(dir == this.direction.right){
+            new SpriteAnimations(this._interalKeys.stand, gImg, new Sprite(0, 0, 10));
+        }else{
+            new SpriteAnimations(this._interalKeys.stand, gImgM, new Sprite(10, 0, 10));
+        }
+    })
+
+    return spriteMap.get(key);
 }
 
 function tmpHardcodedSpriteCrops(num, gImg, gImgM) {

@@ -8,7 +8,9 @@ class TileCollision {
     down(entity) {
 
         let tile = { isSolid: false, isJumpThrough: false };
-        for (let tilePos = entity.posY; !tile.isSolid && !tile.isJumpThrough; tilePos += this._level.tileSize) {
+        let secondTile = { isSolid: false, isJumpThrough: false };
+
+        for (let tilePos = entity.bounds.bottom; !tile.isSolid && !tile.isJumpThrough; tilePos += this._level.tileSize) {
 
             const findings = [this._level.getTileByPosition(entity.bounds.left, tilePos),
             this._level.getTileByPosition(entity.bounds.centerX, tilePos),
@@ -16,17 +18,26 @@ class TileCollision {
             ];
 
             for (const f of findings) {
-                if (f && f.isSolid || f && f.isJumpThrough) {
+                if (f && f.isSolid || f.isJumpThrough && !tile.isSolid) {
                     tile = f;
-                    break;
+                }
+                if(f && tile.isSolid){
+                    secondTile = f;
                 }
             }
         }
 
-        if(tile.isSolid || tile.isJumpThrough){
-            this._level.marker.get("d").y = tile.posY;
-            this._level.marker.get("d").x = tile.posX;
-    
+        if (tile.isSolid || tile.isJumpThrough) {
+
+            this._level.marker.get("y").y = tile.posY;
+            this._level.marker.get("y").x = tile.posX;
+
+            if (tile.isJumpThrough && !secondTile.isSolid) {
+                entity.fallThrough = true;
+            } else {
+                entity.fallThrough = false;
+            }
+
             if (entity.bounds.bottom < tile.bounds.top + 1 && //this line is only for the jumpThrough-purpose
                 (entity.bounds.bottom + entity.velocity.y) > tile.bounds.top) {
                 entity.velocity.y = 0;
@@ -52,8 +63,8 @@ class TileCollision {
         }
 
         if (tile.isSolid) {
-            this._level.marker.get("t").y = tile.posY;
-            this._level.marker.get("t").x = tile.posX;
+            this._level.marker.get("y").y = tile.posY;
+            this._level.marker.get("y").x = tile.posX;
 
             if ((entity.bounds.top + entity.velocity.y) < tile.bounds.bottom) {
                 entity.velocity.y = 0;
@@ -82,8 +93,8 @@ class TileCollision {
         }
 
         if (tile.isSolid) {
-            this._level.marker.get("r").y = tile.posY;
-            this._level.marker.get("r").x = tile.posX;
+            this._level.marker.get("x").y = tile.posY;
+            this._level.marker.get("x").x = tile.posX;
 
             if ((entity.bounds.right + entity.velocity.x) >= tile.bounds.left - 1) {
                 entity._currAccelerationX = entity._baseAccelerationX;
@@ -113,8 +124,8 @@ class TileCollision {
         }
 
         if (tile.isSolid) {
-            this._level.marker.get("l").y = tile.posY;
-            this._level.marker.get("l").x = tile.posX;
+            this._level.marker.get("x").y = tile.posY;
+            this._level.marker.get("x").x = tile.posX;
 
             if ((entity.bounds.left + entity.velocity.x) < tile.bounds.right + 1) {
                 entity._currAccelerationX = entity._baseAccelerationX;

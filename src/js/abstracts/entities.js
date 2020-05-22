@@ -9,7 +9,7 @@ class Entities {
         this._name = name;
         this._resources = resources;
         this._direction = this.direction().right;
-        this._baseAccelerationX = 1.3;
+        this._baseAccelerationX = 0.8;
         this._currAccelerationX = this._baseAccelerationX;
         this._ACCELERATION_Y = 8;
         this._health = 1;

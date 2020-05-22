@@ -21,8 +21,11 @@ class Walk extends ActionState{
             e._direction = e.direction().right;
         } else if (!keyDown[e._interalKeys.left] && !keyDown[e._interalKeys.right]) {
             if (e.velY == 0) {
-                e.changeActionStateTo.stand();;
+                e.changeActionStateTo.stand();
             }
+        }
+        if(keyDown[e._interalKeys.down] && e.fallThrough){
+            e.position.y += 1;
         }
         if (this._tickCounter > 10 && keyDown[e._interalKeys.dash] && !keyDown[e._interalKeys.dash].pressed) {
             keyDown[e._interalKeys.dash].pressed = true;

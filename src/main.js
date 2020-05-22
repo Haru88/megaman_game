@@ -29,58 +29,59 @@ fetch(path + "games/megaman_game/res/level/devLevel.json")
 
     }).then(resources => {
 
-        const LEVEL = new Level(resources);
+        const level = new Level(resources);
 
-        const CANVAS = document.getElementById("canvas2");
-        CANVAS.width = 400;
-        CANVAS.height = 290;
+        const canvas = document.getElementById("canvas2");
+        canvas.width = 400;
+        canvas.height = 290;
 
-        const MEGAMAN = new Player("Megaman", 950, 194, 20, 30, resources);
+        const MegaMan = new Player("Megaman", 950, 194, 20, 30, resources);
 
-        const INPUT = new Input(MEGAMAN);
+        const gameInput = new Input(MegaMan);
 
-        const PHYSICS = new Physics(LEVEL);
-        PHYSICS.add(MEGAMAN);
+        const gamePhysics = new Physics(level);
+        gamePhysics.add(MegaMan);
 
-        const CAMERA = new Camera(0, 0, LEVEL, MEGAMAN);
-        //CAMERA.turnDebugMode();
+        const camera = new Camera(0, 0, level, MegaMan);
 
-        const RENDERER = new Renderer();
-        RENDERER.deltaSpeed = 12;
-        RENDERER.fpsLock = 60;
+        const gameRender = new Renderer();
+        gameRender.fpsLock = 60;
 
-        RENDERER.onTickBefore(delta => {
-            INPUT.update();               
-            MEGAMAN.update();
-        })
+        gameRender.onUpdateBeforeRender(delta => {
+            gameInput.update();               
+            MegaMan.update();
 
-        RENDERER.onRender(() => {
- 
-            CAMERA.update(CANVAS);
-            CAMERA.draw(CANVAS);
+        }).onUpdateAfterRender(delta => {
+            gamePhysics.update(delta); 
 
-            if (INPUT.keyPressed("t")) {
-                MEGAMAN.position.y -= LEVEL.tileSize/4;
+        }).onRender(() => {
+            camera.update(canvas);
+            camera.draw(canvas);
+
+            if (gameInput.keyPressed("t")) {
+                camera.turnDebugMode();
             }
 
-            if (INPUT.keyPressed("g")) {
-                MEGAMAN.position.y += LEVEL.tileSize/4;
+            if (gameInput.keyPressed("p")) {
+                gameRender.pause();
             }
 
-            if (INPUT.keyPressed("p")) {
-                RENDERER.pause();
-            }
-
-            if (INPUT.keysdown["m"]) {
-                resources.get("mm7level").play();
+            if (gameInput.keyPressed("m")) {
+                const track = resources.get("mm7level")
+                if(!this._audioplays){
+                    this._audioplays = setInterval(()=>{
+                        track.play();
+                    }, track.duration)
+                }else{
+                    track.pause();
+                    track.currentTime = 0;
+                    clearInterval(this._audioplays);
+                    this._audioplays = null;
+                }
             }
         });
 
-        RENDERER.onTickAfter(delta => {
-            PHYSICS.update(delta);   
-        })
-
-        RENDERER.start();
+        gameRender.start();
     });
 
 

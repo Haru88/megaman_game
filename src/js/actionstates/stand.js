@@ -22,6 +22,8 @@ class Stand extends ActionState{
         } else if (this._tickCounter > 10 && keyDown[e._interalKeys.dash] && !keyDown[e._interalKeys.dash].pressed) {
             keyDown[e._interalKeys.dash].pressed = true;
             //e.changeActionStateTo.dash();
+        } else if(keyDown[e._interalKeys.down] && e.fallThrough){
+            e.position.y += 1;
         }
     }
 

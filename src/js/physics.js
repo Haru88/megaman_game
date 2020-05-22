@@ -6,34 +6,43 @@ class Physics {
         this._tileCollision = new TileCollision(4, this._level);
 
         this._gravity = 0.5; //this._level.gravity; 
-        this._friction = 0.7; //this._level.friction;
+        this._friction = 0.8; //this._level.friction;
     }
 
-    update(delta) {
+    update(progress) {
+
+        //const delta = progress/25;
+        
         this._entities.forEach(entity => {
+            //entity.velocity.x *= delta;
             this._level.marker.clear();
 
             //X
             entity.velocity.x *= this._friction;
 
+            //entity.velocity.x *= delta;
             if(entity.velocity.x > 0){
                 this._tileCollision.right(entity);
             }else if(entity.velocity.x < 0){
                 this._tileCollision.left(entity);
             }
-            entity.position.x += entity.velX// * delta;
-
+            entity.position.x += entity.velX;
 
             //Y  
-            entity.velocity.y += this._gravity;   
+            //console.log(this._gravity * delta);
+            //entity.velocity.y *= delta;
+            entity.velocity.y += this._gravity ;   
 
+            //entity.velocity.y *= delta;
+            //console.log(entity.velocity.y);
             if(entity.velocity.y < 0){
                 this._tileCollision.up(entity);
             }else{
                 this._tileCollision.down(entity);
             }          
-            entity.position.y += entity.velY// * delta; 
+            entity.position.y += entity.velY;
 
+            //
             if(entity._currAccelerationX > entity._baseAccelerationX){
                 entity._currAccelerationX *= 0.99;
             }  
